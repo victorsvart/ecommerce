@@ -7,6 +7,8 @@ services:
       - DSN=postgres://postgres:postgres@db/ecommerce?sslmode=disable
       - LOCAL_ADMIN_PASSWORD=123qwe
       - LOCAL_USER_PASSWORD=123qwe
+      - APP_SECRET=<exampleeeeeeeeeeechangeifyouwant>
+      - SECURE_TOKEN=false
     ports:
       - 8080:8080
     volumes:
