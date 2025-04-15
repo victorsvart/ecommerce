@@ -48,7 +48,7 @@ func (u *UserHandler) Create(w http.ResponseWriter, r *http.Request) {
 
 	user := input.ToUser()
 	if err := u.usecases.Create(r.Context(), &user); err != nil {
-		utils.RespondJSON(w, http.StatusBadGateway, false, err.Error())
+		utils.RespondJSON(w, http.StatusConflict, false, err.Error())
 		return
 	}
 

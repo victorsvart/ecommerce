@@ -17,6 +17,7 @@ type User struct {
 
 type UserUseCases interface {
 	List(context.Context) ([]User, error)
+	GetByEmail(context.Context, string) (*User, error)
 	Create(context.Context, *User) error
 	Update(context.Context, *User) error
 	Delete(context.Context, uint64) error
@@ -24,6 +25,7 @@ type UserUseCases interface {
 
 type UserRepository interface {
 	List(context.Context) ([]User, error)
+	GetByEmail(context.Context, string) (*User, error)
 	Create(context.Context, *User) error
 	Update(context.Context, *User) error
 	Delete(context.Context, uint64) error
