@@ -5,6 +5,7 @@ import (
 	"os"
 
 	"github.com/victorsvart/go-ecommerce/internal/user/domain"
+	"github.com/victorsvart/go-ecommerce/pkg/rbac"
 	"github.com/victorsvart/go-ecommerce/pkg/utils"
 	"gorm.io/gorm"
 )
@@ -39,6 +40,7 @@ func SeedAdmin(db *gorm.DB) {
 		Name:     "admin",
 		Surname:  "admin",
 		Email:    email,
+		RoleID:   rbac.AdminRoleID,
 		Password: password,
 	}
 
@@ -71,6 +73,7 @@ func SeedSampleUser(db *gorm.DB) {
 		Name:     "Victor",
 		Surname:  "Moraes",
 		Email:    email,
+		RoleID:   rbac.UserRoleID,
 		Password: password,
 	}
 
