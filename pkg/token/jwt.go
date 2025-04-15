@@ -1,6 +1,7 @@
 package token
 
 import (
+	"fmt"
 	"os"
 	"time"
 
@@ -8,14 +9,13 @@ import (
 )
 
 type AppClaims struct {
-	uint64
 	jwt.RegisteredClaims
 }
 
 func GenerateJWT(userID uint64, issuerEM string) (string, error) {
 	claims := AppClaims{
-		userID,
 		jwt.RegisteredClaims{
+			ID:        string(userID),
 			Issuer:    issuerEM,
 			ExpiresAt: jwt.NewNumericDate(time.Now().Add(24 * time.Hour)),
 			IssuedAt:  jwt.NewNumericDate(time.Now()),
@@ -30,4 +30,25 @@ func GenerateJWT(userID uint64, issuerEM string) (string, error) {
 	}
 
 	return ss, nil
+}
+
+func ParseJWT(tokenString string) (AppClaims, error) {
+	token, err := jwt.ParseWithClaims(tokenString, &AppClaims{}, func(t *jwt.Token) (any, error) {
+		if _, ok := t.Method.(*jwt.SigningMethodHMAC); !ok {
+			return AppClaims{}, fmt.Errorf("unexpected signing method: %v", t.Header["alg"])
+		}
+
+		secret := os.Getenv("APP_SECRET")
+		return []byte(secret), nil
+	})
+
+	if err != nil {
+		return AppClaims{}, err
+	}
+
+	if claims, ok := token.Claims.(AppClaims); ok && token.Valid {
+		return claims, nil
+	}
+
+	return AppClaims{}, fmt.Errorf("invalid token")
 }

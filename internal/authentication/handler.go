@@ -14,14 +14,18 @@ import (
 	"github.com/victorsvart/go-ecommerce/pkg/utils"
 )
 
-type AuthHandler struct {
-	usecases domain.UserUseCases
-}
+const (
+	tokenName = "auth_token"
+)
 
 var (
 	ErrWrongCredentials = errors.New("wrong credentials")
 	ErrAuthenticating   = errors.New("internal authentication error")
 )
+
+type AuthHandler struct {
+	usecases domain.UserUseCases
+}
 
 func NewAuthHandler(api chi.Router, usecases domain.UserUseCases) {
 	handler := &AuthHandler{usecases}
@@ -62,7 +66,7 @@ func (a *AuthHandler) Login(w http.ResponseWriter, r *http.Request) {
 	}
 
 	cookie := http.Cookie{
-		Name:     "auth_token",
+		Name:     tokenName,
 		Value:    jwt,
 		HttpOnly: true,
 		Secure:   shouldSecure,
@@ -91,7 +95,7 @@ func (a *AuthHandler) Register(w http.ResponseWriter, r *http.Request) {
 
 func (a *AuthHandler) Logout(w http.ResponseWriter, r *http.Request) {
 	c := &http.Cookie{
-		Name:     "auth_token",
+		Name:     tokenName,
 		Value:    "",
 		MaxAge:   -1,
 		HttpOnly: true,

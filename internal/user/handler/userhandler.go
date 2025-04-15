@@ -8,6 +8,7 @@ import (
 
 	"github.com/go-chi/chi/v5"
 	"github.com/victorsvart/go-ecommerce/internal/user/domain"
+	"github.com/victorsvart/go-ecommerce/pkg/middleware"
 	"github.com/victorsvart/go-ecommerce/pkg/utils"
 )
 
@@ -21,7 +22,7 @@ type UserHandler struct {
 
 func NewUserHandler(api chi.Router, usecases domain.UserUseCases) {
 	handler := &UserHandler{usecases}
-	api.Route("/users", func(r chi.Router) {
+	api.With(middleware.AuthenticateMiddleware).Route("/users", func(r chi.Router) {
 		r.Get("/", handler.List)
 		r.Post("/", handler.Create)
 		r.Put("/", handler.Update)
