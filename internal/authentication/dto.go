@@ -1,6 +1,6 @@
 package authentication
 
-import "github.com/victorsvart/go-ecommerce/internal/user/domain"
+import "github.com/victorsvart/go-ecommerce/internal/core/domain"
 
 type LoginInput struct {
 	Email    string `json:"email"`

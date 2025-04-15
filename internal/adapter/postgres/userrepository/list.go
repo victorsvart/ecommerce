@@ -1,10 +1,10 @@
-package persistence
+package userrepository
 
 import (
 	"context"
 	"errors"
 
-	"github.com/victorsvart/go-ecommerce/internal/user/domain"
+	"github.com/victorsvart/go-ecommerce/internal/core/domain"
 	"gorm.io/gorm"
 )
 

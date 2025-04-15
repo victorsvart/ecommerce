@@ -9,7 +9,7 @@ import (
 
 	"github.com/go-chi/chi/v5"
 	"github.com/go-chi/chi/v5/middleware"
-	"github.com/victorsvart/go-ecommerce/database"
+	"github.com/victorsvart/go-ecommerce/internal/adapter/postgres"
 	"github.com/victorsvart/go-ecommerce/internal/wiring"
 )
 
@@ -38,7 +38,7 @@ func logChiRoutes(r chi.Router) {
 }
 
 func main() {
-	db := database.Connect()
+	db := postgres.Connect()
 	api := setupApiBase()
 	api.Route("/v1/api", func(r chi.Router) {
 		wiring.WireApp(db, r)
