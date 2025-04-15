@@ -10,6 +10,7 @@ import (
 
 	"github.com/go-chi/chi/v5"
 	"github.com/victorsvart/go-ecommerce/internal/user/domain"
+	"github.com/victorsvart/go-ecommerce/pkg/token"
 	"github.com/victorsvart/go-ecommerce/pkg/utils"
 )
 
@@ -48,7 +49,7 @@ func (a *AuthHandler) Login(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	jwt, err := GenerateJWT(user.ID, user.Email)
+	jwt, err := token.GenerateJWT(user.ID, user.Email)
 	if err != nil {
 		utils.RespondJSON(w, http.StatusInternalServerError, false, err.Error())
 		return
