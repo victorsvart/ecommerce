@@ -10,17 +10,22 @@ import (
 
 	"github.com/go-chi/chi/v5"
 	"github.com/victorsvart/go-ecommerce/internal/user/domain"
+	"github.com/victorsvart/go-ecommerce/pkg/token"
 	"github.com/victorsvart/go-ecommerce/pkg/utils"
 )
 
-type AuthHandler struct {
-	usecases domain.UserUseCases
-}
+const (
+	tokenName = "auth_token"
+)
 
 var (
 	ErrWrongCredentials = errors.New("wrong credentials")
 	ErrAuthenticating   = errors.New("internal authentication error")
 )
+
+type AuthHandler struct {
+	usecases domain.UserUseCases
+}
 
 func NewAuthHandler(api chi.Router, usecases domain.UserUseCases) {
 	handler := &AuthHandler{usecases}
@@ -39,7 +44,7 @@ func (a *AuthHandler) Login(w http.ResponseWriter, r *http.Request) {
 	}
 	user, err := a.usecases.GetByEmail(r.Context(), input.Email)
 	if err != nil {
-		utils.RespondJSON(w, http.StatusInternalServerError, false, ErrWrongCredentials)
+		utils.RespondJSON(w, http.StatusInternalServerError, false, ErrWrongCredentials.Error())
 		return
 	}
 
@@ -48,7 +53,7 @@ func (a *AuthHandler) Login(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	jwt, err := GenerateJWT(user.ID, user.Email)
+	jwt, err := token.GenerateJWT(user.ID, user.Email)
 	if err != nil {
 		utils.RespondJSON(w, http.StatusInternalServerError, false, err.Error())
 		return
@@ -60,15 +65,16 @@ func (a *AuthHandler) Login(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	cookie := http.Cookie{
-		Name:     "auth_token",
+	http.SetCookie(w, &http.Cookie{
+		Name:     tokenName,
 		Value:    jwt,
 		HttpOnly: true,
 		Secure:   shouldSecure,
+		SameSite: http.SameSiteStrictMode,
+		Path:     "/",
 		Expires:  time.Now().Add(24 * time.Hour),
-	}
+	})
 
-	http.SetCookie(w, &cookie)
 	utils.RespondJSON(w, http.StatusOK, true, "Logged in!")
 }
 
@@ -90,10 +96,13 @@ func (a *AuthHandler) Register(w http.ResponseWriter, r *http.Request) {
 
 func (a *AuthHandler) Logout(w http.ResponseWriter, r *http.Request) {
 	c := &http.Cookie{
-		Name:     "auth_token",
+		Name:     tokenName,
 		Value:    "",
-		MaxAge:   -1,
 		HttpOnly: true,
+		Secure:   false,
+		SameSite: http.SameSiteStrictMode,
+		Path:     "/",
+		Expires:  time.Now().Add(24 * time.Hour),
 	}
 
 	http.SetCookie(w, c)
