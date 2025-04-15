@@ -1,10 +1,10 @@
-package database
+package postgres
 
 import (
 	"log"
 	"os"
 
-	"github.com/victorsvart/go-ecommerce/internal/user/domain"
+	"github.com/victorsvart/go-ecommerce/internal/core/domain"
 	"github.com/victorsvart/go-ecommerce/pkg/rbac"
 	"github.com/victorsvart/go-ecommerce/pkg/utils"
 	"gorm.io/gorm"

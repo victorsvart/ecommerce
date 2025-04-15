@@ -1,9 +1,9 @@
-package persistence
+package userrepository
 
 import (
 	"context"
 
-	"github.com/victorsvart/go-ecommerce/internal/user/domain"
+	"github.com/victorsvart/go-ecommerce/internal/core/domain"
 )
 
 func (u *userRepositoryImpl) Create(ctx context.Context, user *domain.User) error {

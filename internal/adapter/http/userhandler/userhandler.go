@@ -1,4 +1,4 @@
-package handler
+package userhandler
 
 import (
 	"encoding/json"
@@ -7,7 +7,7 @@ import (
 	"strconv"
 
 	"github.com/go-chi/chi/v5"
-	"github.com/victorsvart/go-ecommerce/internal/user/domain"
+	"github.com/victorsvart/go-ecommerce/internal/core/domain"
 	"github.com/victorsvart/go-ecommerce/pkg/middleware"
 	"github.com/victorsvart/go-ecommerce/pkg/rbac"
 	"github.com/victorsvart/go-ecommerce/pkg/utils"

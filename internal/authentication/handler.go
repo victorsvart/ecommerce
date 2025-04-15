@@ -9,7 +9,7 @@ import (
 	"time"
 
 	"github.com/go-chi/chi/v5"
-	"github.com/victorsvart/go-ecommerce/internal/user/domain"
+	"github.com/victorsvart/go-ecommerce/internal/core/domain"
 	"github.com/victorsvart/go-ecommerce/pkg/token"
 	"github.com/victorsvart/go-ecommerce/pkg/utils"
 )
