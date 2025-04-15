@@ -44,7 +44,7 @@ func (a *AuthHandler) Login(w http.ResponseWriter, r *http.Request) {
 	}
 	user, err := a.usecases.GetByEmail(r.Context(), input.Email)
 	if err != nil {
-		utils.RespondJSON(w, http.StatusInternalServerError, false, ErrWrongCredentials)
+		utils.RespondJSON(w, http.StatusInternalServerError, false, ErrWrongCredentials.Error())
 		return
 	}
 
@@ -65,15 +65,16 @@ func (a *AuthHandler) Login(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	cookie := http.Cookie{
+	http.SetCookie(w, &http.Cookie{
 		Name:     tokenName,
 		Value:    jwt,
 		HttpOnly: true,
 		Secure:   shouldSecure,
+		SameSite: http.SameSiteStrictMode,
+		Path:     "/",
 		Expires:  time.Now().Add(24 * time.Hour),
-	}
+	})
 
-	http.SetCookie(w, &cookie)
 	utils.RespondJSON(w, http.StatusOK, true, "Logged in!")
 }
 

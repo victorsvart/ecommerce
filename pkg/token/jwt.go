@@ -9,13 +9,14 @@ import (
 )
 
 type AppClaims struct {
+	UserID uint64 `json:"user_id"`
 	jwt.RegisteredClaims
 }
 
 func GenerateJWT(userID uint64, issuerEM string) (string, error) {
 	claims := AppClaims{
-		jwt.RegisteredClaims{
-			ID:        string(userID),
+		UserID: userID,
+		RegisteredClaims: jwt.RegisteredClaims{
 			Issuer:    issuerEM,
 			ExpiresAt: jwt.NewNumericDate(time.Now().Add(24 * time.Hour)),
 			IssuedAt:  jwt.NewNumericDate(time.Now()),
@@ -46,8 +47,8 @@ func ParseJWT(tokenString string) (AppClaims, error) {
 		return AppClaims{}, err
 	}
 
-	if claims, ok := token.Claims.(AppClaims); ok && token.Valid {
-		return claims, nil
+	if claims, ok := token.Claims.(*AppClaims); ok && token.Valid {
+		return *claims, nil
 	}
 
 	return AppClaims{}, fmt.Errorf("invalid token")

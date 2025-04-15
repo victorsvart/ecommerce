@@ -22,7 +22,7 @@ type UserHandler struct {
 
 func NewUserHandler(api chi.Router, usecases domain.UserUseCases) {
 	handler := &UserHandler{usecases}
-	api.With(middleware.AuthenticateMiddleware).Route("/users", func(r chi.Router) {
+	api.With(middleware.Auth).Route("/users", func(r chi.Router) {
 		r.Get("/", handler.List)
 		r.Post("/", handler.Create)
 		r.Put("/", handler.Update)

@@ -2,35 +2,33 @@ package middleware
 
 import (
 	"context"
+	"errors"
 	"net/http"
-	"strconv"
 
 	"github.com/victorsvart/go-ecommerce/pkg/appcontext"
 	"github.com/victorsvart/go-ecommerce/pkg/token"
 )
 
-func AuthenticateMiddleware(next http.Handler) http.Handler {
+var (
+	ErrUnauthorized = errors.New("Unauthorized")
+)
+
+func Auth(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		cookie, err := r.Cookie("auth_token")
 		if err != nil {
-			http.Error(w, "Unauthorized", http.StatusUnauthorized)
+			http.Error(w, ErrUnauthorized.Error(), http.StatusUnauthorized)
 			return
 		}
 
 		claims, err := token.ParseJWT(cookie.Value)
 		if err != nil {
-			http.Error(w, "Unauthorized: Invalid token", http.StatusUnauthorized)
-			return
-		}
-
-		userIDFloat, err := strconv.ParseUint(claims.RegisteredClaims.ID, 10, 64)
-		if err != nil {
-			http.Error(w, "Unauthorized: Invalid user ID in token", http.StatusUnauthorized)
+			http.Error(w, ErrUnauthorized.Error(), http.StatusUnauthorized)
 			return
 		}
 
 		authCtx := appcontext.AuthContext{
-			UserID: uint64(userIDFloat),
+			UserID: uint64(claims.UserID),
 			//	RoleID: uint64(roleIDFloat),
 		}
 		ctx := context.WithValue(r.Context(), appcontext.AuthCtxKey, authCtx)
