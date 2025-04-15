@@ -53,7 +53,7 @@ func (a *AuthHandler) Login(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	jwt, err := token.GenerateJWT(user.ID, user.Email)
+	jwt, err := token.GenerateJWT(user.ID, user.RoleID, user.Email)
 	if err != nil {
 		utils.RespondJSON(w, http.StatusInternalServerError, false, err.Error())
 		return

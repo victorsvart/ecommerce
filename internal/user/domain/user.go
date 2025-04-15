@@ -11,6 +11,7 @@ type User struct {
 	Surname   string `gorm:"size:255"`
 	Email     string `gorm:"unique;size:255"`
 	Password  string `gorm:"size:255"`
+	RoleID    uint
 	CreatedAt time.Time
 	UpdatedAt *time.Time
 }

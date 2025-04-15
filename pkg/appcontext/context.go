@@ -7,7 +7,7 @@ import (
 
 type AuthContext struct {
 	UserID uint64
-	// RoleID uint64
+	RoleID uint
 }
 
 type ctxKey string
