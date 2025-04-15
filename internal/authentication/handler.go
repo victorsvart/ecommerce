@@ -98,8 +98,11 @@ func (a *AuthHandler) Logout(w http.ResponseWriter, r *http.Request) {
 	c := &http.Cookie{
 		Name:     tokenName,
 		Value:    "",
-		MaxAge:   -1,
 		HttpOnly: true,
+		Secure:   false,
+		SameSite: http.SameSiteStrictMode,
+		Path:     "/",
+		Expires:  time.Now().Add(24 * time.Hour),
 	}
 
 	http.SetCookie(w, c)
