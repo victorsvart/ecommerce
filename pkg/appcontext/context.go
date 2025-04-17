@@ -2,6 +2,7 @@ package appcontext
 
 import (
 	"context"
+	"errors"
 	"net/http"
 )
 
@@ -19,7 +20,14 @@ func GetAuthContextFromRequest(r *http.Request) (AuthContext, bool) {
 	return auth, ok
 }
 
-func GetAuthContext(ctx context.Context) (AuthContext, bool) {
+func GetAuthContext(ctx context.Context) (AuthContext, error) {
 	auth, ok := ctx.Value(AuthCtxKey).(AuthContext)
-	return auth, ok
+	if !ok {
+		return AuthContext{}, ErrContextFetch
+	}
+	return auth, nil
 }
+
+var (
+	ErrContextFetch = errors.New("error fetching context")
+)

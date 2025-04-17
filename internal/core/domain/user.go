@@ -3,6 +3,8 @@ package domain
 import (
 	"context"
 	"time"
+
+	"github.com/victorsvart/go-ecommerce/pkg/rbac"
 )
 
 type User struct {
@@ -12,6 +14,7 @@ type User struct {
 	Email     string `gorm:"unique;size:255"`
 	Password  string `gorm:"size:255"`
 	RoleID    uint
+	Products  []Product
 	CreatedAt time.Time
 	UpdatedAt *time.Time
 }
@@ -52,5 +55,6 @@ func (u *UserInput) ToUser() User {
 		Surname:  u.Surname,
 		Email:    u.Email,
 		Password: u.Password,
+		RoleID:   rbac.UserRoleID,
 	}
 }

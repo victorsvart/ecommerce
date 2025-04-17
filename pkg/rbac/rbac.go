@@ -4,7 +4,13 @@ import "slices"
 
 var (
 	RolePermissions = map[uint][]string{
-		UserRoleID: {},
+		UserRoleID: {
+			ListProduct,
+			GetProduct,
+			CreateProduct,
+			UpdateProduct,
+			DeleteProduct,
+		},
 	}
 )
 

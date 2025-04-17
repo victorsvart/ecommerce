@@ -3,6 +3,7 @@ package userhandler
 import (
 	"encoding/json"
 	"errors"
+	"log"
 	"net/http"
 	"strconv"
 
@@ -49,6 +50,7 @@ func (u *UserHandler) Create(w http.ResponseWriter, r *http.Request) {
 	}
 
 	user := input.ToUser()
+	log.Println("VALUE")
 	if err := u.usecases.Create(r.Context(), &user); err != nil {
 		utils.RespondJSON(w, http.StatusConflict, false, err.Error())
 		return

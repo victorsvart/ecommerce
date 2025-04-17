@@ -4,7 +4,6 @@ import (
 	"context"
 
 	"github.com/victorsvart/go-ecommerce/internal/core/domain"
-	"gorm.io/gorm/clause"
 )
 
 func (u *userRepositoryImpl) Update(ctx context.Context, user *domain.User) error {
@@ -15,12 +14,15 @@ func (u *userRepositoryImpl) Update(ctx context.Context, user *domain.User) erro
 	tx := u.db.Model(&domain.User{}).
 		Omit("password").
 		Where("id = ?", user.ID).
-		Clauses(clause.Returning{}).
 		Updates(user).
 		Scan(&user)
 
 	if tx.Error != nil {
 		return tx.Error
+	}
+
+	if tx.RowsAffected == 0 {
+		return ErrUserNotFound
 	}
 
 	return nil
