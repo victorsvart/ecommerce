@@ -1,8 +1,10 @@
 package postgres
 
 import (
+	"encoding/json"
 	"log"
 	"os"
+	"path/filepath"
 
 	"github.com/victorsvart/go-ecommerce/internal/core/domain"
 	"github.com/victorsvart/go-ecommerce/pkg/rbac"
@@ -13,10 +15,12 @@ import (
 func InitData(db *gorm.DB) {
 	db.AutoMigrate(
 		&domain.User{},
+		&domain.Product{},
 	)
 
 	SeedAdmin(db)
 	SeedSampleUser(db)
+	SeedProduct(db)
 }
 
 func SeedAdmin(db *gorm.DB) {
@@ -83,4 +87,45 @@ func SeedSampleUser(db *gorm.DB) {
 	}
 
 	log.Println("Sample user seeded successfully")
+}
+
+func SeedProduct(db *gorm.DB) {
+	var count int64
+	err := db.Model(&domain.Product{}).Count(&count).Error
+	if err != nil {
+		log.Fatalf("Error querying db during product: %v", err)
+	}
+
+	if count > 0 {
+		log.Println("Products already seeded")
+		return
+	}
+
+	dir, err := os.Getwd()
+	if err != nil {
+		log.Fatalf("Error getting working directory: %v", err)
+	}
+
+	filePath := filepath.Join(dir, "internal", "adapter", "postgres", "json", "products.json")
+	file, err := os.ReadFile(filePath)
+	if err != nil {
+		log.Fatalf("Error reading products.json seed file: %v", err)
+	}
+
+	var products []domain.Product
+	if err := json.Unmarshal(file, &products); err != nil {
+		log.Fatalf("Error unmarshalling products.json: %v", err)
+	}
+
+	if len(products) == 0 {
+		log.Println("No products found in seed file.")
+		return
+	}
+
+	if err := db.Create(&products).Error; err != nil {
+		log.Fatalf("Error seeding products: %v", err)
+	}
+
+	log.Printf("Seeded %d products successfully.", len(products))
+
 }
