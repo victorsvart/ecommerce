@@ -11,14 +11,18 @@ type Product struct {
 
 type ProductRepository interface {
 	Get(context.Context, uint64) (*Product, error)
+	GetAll(context.Context) ([]Product, error)
 	Create(context.Context, *Product) error
 	Update(context.Context, *Product) error
+	Delete(context.Context, uint64) error
 }
 
 type ProductUsecases interface {
 	Get(context.Context, uint64) (*Product, error)
+	GetAll(context.Context) ([]Product, error)
 	Create(context.Context, *Product) error
 	Update(context.Context, *Product) error
+	Delete(context.Context, uint64) error
 }
 
 type ProductInput struct {

@@ -17,3 +17,12 @@ func ToProductPresenter(p *domain.Product) ProductPresenter {
 		UserID:   p.UserID,
 	}
 }
+
+func ToProductPresenterSlice(p []domain.Product) []ProductPresenter {
+	s := make([]ProductPresenter, 0)
+	for i := range p {
+		s = append(s, ToProductPresenter(&p[i]))
+	}
+
+	return s
+}

@@ -19,8 +19,10 @@ func NewProductHandler(api chi.Router, usecases domain.ProductUsecases) {
 	handler := ProductHandler{usecases}
 	api.Route("/products", func(r chi.Router) {
 		r.Get("/{id}", handler.GetById)
+		r.Get("/", handler.GetAll)
 		r.Post("/", handler.CreateProducts)
 		r.Put("/", handler.UpdateProducts)
+		r.Delete("/{id}", handler.Delete)
 	})
 }
 
@@ -43,7 +45,17 @@ func (p *ProductHandler) GetById(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	utils.RespondJSON(w, http.StatusOK, true, product)
+	utils.RespondJSON(w, http.StatusOK, true, ToProductPresenter(product))
+}
+
+func (p *ProductHandler) GetAll(w http.ResponseWriter, r *http.Request) {
+	products, err := p.usecases.GetAll(r.Context())
+	if err != nil {
+		utils.RespondJSON(w, http.StatusInternalServerError, false, err.Error())
+		return
+	}
+
+	utils.RespondJSON(w, http.StatusOK, true, ToProductPresenterSlice(products))
 }
 
 func (p *ProductHandler) CreateProducts(w http.ResponseWriter, r *http.Request) {
@@ -75,5 +87,27 @@ func (p *ProductHandler) UpdateProducts(w http.ResponseWriter, r *http.Request) 
 		return
 	}
 
-	utils.RespondJSON(w, http.StatusOK, true, product)
+	utils.RespondJSON(w, http.StatusOK, true, ToProductPresenter(&product))
+}
+
+func (p *ProductHandler) Delete(w http.ResponseWriter, r *http.Request) {
+	idPath := r.PathValue("id")
+	if idPath == "" {
+		utils.RespondJSON(w, http.StatusBadRequest, false, errors.New("id is required"))
+		return
+	}
+
+	id, err := strconv.ParseUint(idPath, 10, 64)
+	if err != nil {
+		utils.RespondJSON(w, http.StatusInternalServerError, false, errors.New("error getting id"))
+		return
+	}
+
+	if err := p.usecases.Delete(r.Context(), id); err != nil {
+		utils.RespondJSON(w, http.StatusInternalServerError, false, err.Error())
+		return
+	}
+
+	utils.RespondJSON(w, http.StatusOK, true, "Product deleted successfully")
+
 }
