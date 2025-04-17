@@ -3,10 +3,10 @@ package producthandler
 import "github.com/victorsvart/go-ecommerce/internal/core/domain"
 
 type ProductPresenter struct {
-	ID       uint64
-	Name     string
-	ImageURL string
-	UserID   uint64
+	ID       uint64 `json:"id"`
+	Name     string `json:"name"`
+	ImageURL string `json:"imageUrl"`
+	UserID   uint64 `json:"userId"`
 }
 
 func ToProductPresenter(p *domain.Product) ProductPresenter {
