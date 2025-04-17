@@ -7,9 +7,13 @@ import (
 )
 
 func (p *productRepositoryImpl) Delete(ctx context.Context, id uint64) error {
-	tx := p.db.Delete(&domain.Product{}, id)
-	if err := tx.Error; err != nil {
+	if err := p.canUserTakeAction(ctx, id); err != nil {
 		return err
+	}
+
+	tx := p.db.Delete(&domain.Product{}, id)
+	if tx.Error != nil {
+		return tx.Error
 	}
 
 	if tx.RowsAffected == 0 {

@@ -8,6 +8,8 @@ import (
 
 	"github.com/go-chi/chi/v5"
 	"github.com/victorsvart/go-ecommerce/internal/core/domain"
+	"github.com/victorsvart/go-ecommerce/pkg/middleware"
+	"github.com/victorsvart/go-ecommerce/pkg/rbac"
 	"github.com/victorsvart/go-ecommerce/pkg/utils"
 )
 
@@ -17,12 +19,12 @@ type ProductHandler struct {
 
 func NewProductHandler(api chi.Router, usecases domain.ProductUsecases) {
 	handler := ProductHandler{usecases}
-	api.Route("/products", func(r chi.Router) {
-		r.Get("/{id}", handler.GetById)
-		r.Get("/", handler.GetAll)
-		r.Post("/", handler.CreateProducts)
-		r.Put("/", handler.UpdateProducts)
-		r.Delete("/{id}", handler.Delete)
+	api.With(middleware.Auth).Route("/products", func(r chi.Router) {
+		r.With(middleware.Permission(rbac.GetProduct)).Get("/{id}", handler.GetById)
+		r.With(middleware.Permission(rbac.GetProduct)).Get("/", handler.GetAll)
+		r.With(middleware.Permission(rbac.CreateProduct)).Post("/", handler.CreateProducts)
+		r.With(middleware.Permission(rbac.UpdateProduct)).Put("/", handler.UpdateProducts)
+		r.With(middleware.Permission(rbac.DeleteProduct)).Delete("/{id}", handler.Delete)
 	})
 }
 
@@ -109,5 +111,4 @@ func (p *ProductHandler) Delete(w http.ResponseWriter, r *http.Request) {
 	}
 
 	utils.RespondJSON(w, http.StatusOK, true, "Product deleted successfully")
-
 }

@@ -1,6 +1,9 @@
 package authentication
 
-import "github.com/victorsvart/go-ecommerce/internal/core/domain"
+import (
+	"github.com/victorsvart/go-ecommerce/internal/core/domain"
+	"github.com/victorsvart/go-ecommerce/pkg/rbac"
+)
 
 type LoginInput struct {
 	Email    string `json:"email"`
@@ -20,5 +23,6 @@ func (r *RegisterInput) ToUser() domain.User {
 		Surname:  r.Surname,
 		Email:    r.Email,
 		Password: r.Password,
+		RoleID:   rbac.UserRoleID,
 	}
 }

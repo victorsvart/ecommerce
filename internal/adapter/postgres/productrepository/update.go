@@ -11,6 +11,10 @@ func (p *productRepositoryImpl) Update(ctx context.Context, product *domain.Prod
 		return err
 	}
 
+	if err := p.canUserTakeAction(ctx, product.ID); err != nil {
+		return err
+	}
+
 	tx := p.db.
 		Where("id = ?", product.ID).
 		Updates(product).
