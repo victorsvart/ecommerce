@@ -44,7 +44,7 @@ func (a *AuthHandler) Login(w http.ResponseWriter, r *http.Request) {
 	}
 	user, err := a.usecases.GetByEmail(r.Context(), input.Email)
 	if err != nil {
-		utils.RespondJSON(w, http.StatusInternalServerError, false, ErrWrongCredentials.Error())
+		utils.RespondJSON(w, http.StatusInternalServerError, false, err.Error())
 		return
 	}
 
