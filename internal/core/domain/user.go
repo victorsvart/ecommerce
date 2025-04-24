@@ -20,6 +20,7 @@ type User struct {
 }
 
 type UserUseCases interface {
+	GetById(ctx context.Context, id uint64) (*User, error)
 	List(context.Context) ([]User, error)
 	GetByEmail(context.Context, string) (*User, error)
 	Create(context.Context, *User) error
@@ -28,6 +29,7 @@ type UserUseCases interface {
 }
 
 type UserRepository interface {
+	GetById(ctx context.Context, id uint64) (*User, error)
 	List(context.Context) ([]User, error)
 	GetByEmail(context.Context, string) (*User, error)
 	Create(context.Context, *User) error

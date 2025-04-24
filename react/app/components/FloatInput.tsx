@@ -1,30 +1,32 @@
 import React from "react";
-import type { UseFormRegisterReturn } from "react-hook-form";
 
-export interface InputProps {
+type FloatInputProps = {
   id: string;
-  type?: string;
   label: string;
-  register: UseFormRegisterReturn<any>;
+  type?: string;
   error?: string;
-}
+  name: string;
+  required?: boolean;
+};
 
-const FloatInput: React.FC<InputProps> = ({
+const FloatInput: React.FC<FloatInputProps> = ({
   id,
-  type = "text",
   label,
-  register,
+  type = "text",
   error,
+  name,
+  required,
 }) => {
   return (
     <div className="relative">
       <input
         type={type}
         id={id}
+        name={name}
+        required={required}
         placeholder=" "
         className={`block px-2.5 pb-2.5 pt-4 w-full text-sm text-gray-900 bg-transparent rounded-lg border ${error ? "border-red-500" : "border-gray-300"
           } appearance-none dark:text-white dark:border-gray-600 focus:outline-none focus:ring-0 focus:border-blue-600 peer`}
-        {...register}
       />
       <label
         htmlFor={id}

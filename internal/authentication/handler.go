@@ -10,6 +10,7 @@ import (
 
 	"github.com/go-chi/chi/v5"
 	"github.com/victorsvart/go-ecommerce/internal/core/domain"
+	"github.com/victorsvart/go-ecommerce/pkg/appcontext"
 	"github.com/victorsvart/go-ecommerce/pkg/token"
 	"github.com/victorsvart/go-ecommerce/pkg/utils"
 )
@@ -30,10 +31,32 @@ type AuthHandler struct {
 func NewAuthHandler(api chi.Router, usecases domain.UserUseCases) {
 	handler := &AuthHandler{usecases}
 	api.Route("/auth", func(r chi.Router) {
+		r.Get("/me", handler.Me)
 		r.Post("/login", handler.Login)
 		r.Post("/register", handler.Register)
 		r.Post("/logout", handler.Logout)
 	})
+}
+
+func (a *AuthHandler) Me(w http.ResponseWriter, r *http.Request) {
+	authCtx, err := appcontext.GetAuthContext(r.Context())
+	if err != nil {
+		utils.RespondJSON(w, http.StatusBadRequest, false, err.Error())
+		return
+	}
+
+	user, err := a.usecases.GetById(r.Context(), authCtx.UserID)
+	if err != nil {
+		utils.RespondJSON(w, http.StatusBadRequest, false, err.Error())
+		return
+	}
+
+	if user == nil {
+		utils.RespondJSON(w, http.StatusUnauthorized, false, "Invalid user or not logged in")
+		return
+	}
+
+	utils.RespondJSON(w, http.StatusOK, true, "ok")
 }
 
 func (a *AuthHandler) Login(w http.ResponseWriter, r *http.Request) {

@@ -1,38 +1,52 @@
-import { useState } from "react";
+import { redirect, Form, data } from "react-router";
 import api from "../../api/axios";
-import type { AxiosError } from "axios";
 import { LoginInput } from "~/components/LoginInput";
+import type { Route } from "./+types/Login";
 import { AlertError } from "~/components/AlertError";
-import { useForm, type SubmitHandler } from "react-hook-form";
+import { useEffect, useState } from "react";
 
-type Input = {
-  email: string;
-  password: string;
-};
+export async function loader() {
+  try {
+    await api.get("/auth/me");
+    return redirect("/home");
+  } catch {
+    return null;
+  }
+}
 
-export default function Login() {
-  const [error, setError] = useState<string | null>(null);
+export async function action({ request }: Route.ActionArgs) {
+  const formData = await request.formData();
+  const email = formData.get("email");
+  const password = formData.get("password");
 
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-  } = useForm<Input>();
-
-  const onSubmit: SubmitHandler<Input> = async (data) => {
-    try {
-      await api.post("/auth/login", data);
-    } catch (error) {
-      const err = error as AxiosError<{ data: string }>;
-
-      if (err.response) {
-        setError(err.response.data.data);
-      } else {
-        setError("Um erro interno ocorreu. Tente novamente.");
+  return api
+    .post("/auth/login", { email, password })
+    .then(() => redirect("/home"))
+    .catch((error: any) => {
+      if (error.response) {
+        return data({
+          error: {
+            status: error.response.status,
+            message: error.response.data,
+          },
+        });
       }
-    }
-  };
 
+      return data({
+        error: {
+          status: 500,
+          message: "Unknown error",
+        },
+      });
+    });
+}
+
+export default function Login({ actionData }: Route.ComponentProps) {
+  const [showError, setShowError] = useState(true);
+
+  useEffect(() => {
+    setShowError(true);
+  }, [actionData]);
   return (
     <div className="w-full">
       <div className="flex flex-col md:flex-row min-h-screen">
@@ -55,16 +69,15 @@ export default function Login() {
                 </h4>
               </div>
 
-              <form
-                onSubmit={handleSubmit(onSubmit)}
-                className="shadow-md rounded-lg p-6"
-              >
+              <Form method="post" className="shadow-md rounded-lg p-6">
                 <div className="text-center mb-4">
                   <h4 className="text-lg font-semibold text-gray-400">
                     Iniciar Sessão
                   </h4>
                 </div>
-                <LoginInput register={register} errors={errors} />
+
+                <LoginInput />
+
                 <div className="mt-4">
                   <button
                     type="submit"
@@ -87,16 +100,15 @@ export default function Login() {
                     Logar como recrutador
                   </span>
                 </button>
-
-                {error && (
-                  <div className="mt-4">
+                <div className="m-4">
+                  {actionData?.error?.message && showError && (
                     <AlertError
-                      message={error}
-                      onClose={() => setError(null)}
+                      message={actionData.error.message}
+                      onClose={() => setShowError(false)}
                     />
-                  </div>
-                )}
-              </form>
+                  )}
+                </div>
+              </Form>
             </div>
           </div>
         </div>
