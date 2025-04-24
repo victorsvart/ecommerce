@@ -3,6 +3,7 @@ package authentication
 import (
 	"encoding/json"
 	"errors"
+	"log"
 	"net/http"
 	"os"
 	"strconv"
@@ -11,6 +12,7 @@ import (
 	"github.com/go-chi/chi/v5"
 	"github.com/victorsvart/go-ecommerce/internal/core/domain"
 	"github.com/victorsvart/go-ecommerce/pkg/appcontext"
+	"github.com/victorsvart/go-ecommerce/pkg/middleware"
 	"github.com/victorsvart/go-ecommerce/pkg/token"
 	"github.com/victorsvart/go-ecommerce/pkg/utils"
 )
@@ -31,7 +33,7 @@ type AuthHandler struct {
 func NewAuthHandler(api chi.Router, usecases domain.UserUseCases) {
 	handler := &AuthHandler{usecases}
 	api.Route("/auth", func(r chi.Router) {
-		r.Get("/me", handler.Me)
+		r.With(middleware.Auth).Get("/me", handler.Me)
 		r.Post("/login", handler.Login)
 		r.Post("/register", handler.Register)
 		r.Post("/logout", handler.Logout)
@@ -39,9 +41,22 @@ func NewAuthHandler(api chi.Router, usecases domain.UserUseCases) {
 }
 
 func (a *AuthHandler) Me(w http.ResponseWriter, r *http.Request) {
+	// Log incoming request headers
+	log.Println("Request Headers:", r.Header)
+
+	// Log all cookies
+	log.Println("Cookies:", r.Cookies())
+
+	// If you're looking for a specific cookie (like auth_token)
+	cookie, err := r.Cookie("auth_token")
+	if err != nil {
+		log.Println("Error retrieving auth_token cookie:", err)
+	} else {
+		log.Println("auth_token cookie:", cookie.Value)
+	}
 	authCtx, err := appcontext.GetAuthContext(r.Context())
 	if err != nil {
-		utils.RespondJSON(w, http.StatusBadRequest, false, err.Error())
+		utils.RespondJSON(w, http.StatusUnauthorized, false, err.Error())
 		return
 	}
 
@@ -93,7 +108,7 @@ func (a *AuthHandler) Login(w http.ResponseWriter, r *http.Request) {
 		Value:    jwt,
 		HttpOnly: true,
 		Secure:   shouldSecure,
-		SameSite: http.SameSiteStrictMode,
+		SameSite: http.SameSiteLaxMode,
 		Path:     "/",
 		Expires:  time.Now().Add(24 * time.Hour),
 	})
@@ -123,7 +138,7 @@ func (a *AuthHandler) Logout(w http.ResponseWriter, r *http.Request) {
 		Value:    "",
 		HttpOnly: true,
 		Secure:   false,
-		SameSite: http.SameSiteStrictMode,
+		SameSite: http.SameSiteLaxMode,
 		Path:     "/",
 		Expires:  time.Now().Add(24 * time.Hour),
 	}

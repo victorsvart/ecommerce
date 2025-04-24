@@ -1,43 +1,48 @@
 import { redirect, Form, data } from "react-router";
-import api from "../../api/axios";
+import { baseApi } from "../../api/axios";
 import { LoginInput } from "~/components/LoginInput";
 import type { Route } from "./+types/Login";
 import { AlertError } from "~/components/AlertError";
 import { useEffect, useState } from "react";
+import createApi from "../../api/axios";
 
-export async function loader() {
-  try {
-    await api.get("/auth/me");
-    return redirect("/home");
-  } catch {
-    return null;
-  }
+export async function loader({ request }: Route.LoaderArgs) {
+  const api = createApi(request.headers);
+  return api
+    .get("/auth/me", {
+      headers: { cookie: request.headers.get("cookie") },
+    })
+    .then(() => {
+      return redirect("/");
+    })
+    .catch((error: any) => {
+      return null;
+    });
 }
 
-export async function action({ request }: Route.ActionArgs) {
+export async function clientAction({ request }: Route.ActionArgs) {
   const formData = await request.formData();
   const email = formData.get("email");
   const password = formData.get("password");
 
-  return api
+  return baseApi
     .post("/auth/login", { email, password })
-    .then(() => redirect("/home"))
+    .then(() => redirect("/"))
     .catch((error: any) => {
       if (error.response) {
-        return data({
-          error: {
-            status: error.response.status,
-            message: error.response.data,
-          },
-        });
+        return {
+          status: error.response.status,
+          message: error.response.data,
+        };
       }
 
-      return data({
-        error: {
-          status: 500,
+      throw data(
+        {
+          status: 404,
           message: "Unknown error",
         },
-      });
+        { status: 404 }
+      );
     });
 }
 
@@ -47,6 +52,7 @@ export default function Login({ actionData }: Route.ComponentProps) {
   useEffect(() => {
     setShowError(true);
   }, [actionData]);
+
   return (
     <div className="w-full">
       <div className="flex flex-col md:flex-row min-h-screen">
@@ -101,9 +107,9 @@ export default function Login({ actionData }: Route.ComponentProps) {
                   </span>
                 </button>
                 <div className="m-4">
-                  {actionData?.error?.message && showError && (
+                  {actionData?.message && showError && (
                     <AlertError
-                      message={actionData.error.message}
+                      message={actionData.message}
                       onClose={() => setShowError(false)}
                     />
                   )}
