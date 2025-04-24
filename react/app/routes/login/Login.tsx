@@ -27,13 +27,7 @@ export async function loader({ request }: Route.LoaderArgs) {
         return null;
       }
 
-      throw data(
-        {
-          status: 500,
-          message: error?.message,
-        },
-        { status: 500 }
-      );
+      throw data({ status: error?.status, statusText: error?.message });
     });
 }
 
