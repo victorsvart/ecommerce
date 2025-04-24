@@ -1,0 +1,33 @@
+{
+  "transitional": {
+    "silentJSONParsing": true,
+    "forcedJSONParsing": true,
+    "clarifyTimeoutError": false
+  },
+  "adapter": [
+    "xhr",
+    "http",
+    "fetch"
+  ],
+  "transformRequest": [
+    null
+  ],
+  "transformResponse": [
+    null
+  ],
+  "timeout": 0,
+  "xsrfCookieName": "XSRF-TOKEN",
+  "xsrfHeaderName": "X-XSRF-TOKEN",
+  "maxContentLength": -1,
+  "maxBodyLength": -1,
+  "env": {},
+  "headers": {
+    "Accept": "application/json, text/plain, */*",
+    "Content-Type": "application/json"
+  },
+  "baseURL": "http://localhost:8080/v1/api",
+  "withCredentials": true,
+  "method": "get",
+  "url": "/auth/me",
+  "allowAbsoluteUrls": true
+}
