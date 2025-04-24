@@ -1,10 +1,11 @@
-import { redirect, Form, data } from "react-router";
+import { redirect, Form, data, useSearchParams } from "react-router";
 import { baseApi } from "../../api/axios";
 import { LoginInput } from "~/components/LoginInput";
 import type { Route } from "./+types/Login";
 import { AlertError } from "~/components/AlertError";
 import { useEffect, useState } from "react";
 import createApi from "../../api/axios";
+import type { AxiosError } from "axios";
 
 export async function loader({ request }: Route.LoaderArgs) {
   const api = createApi(request.headers);
@@ -13,10 +14,26 @@ export async function loader({ request }: Route.LoaderArgs) {
       headers: { cookie: request.headers.get("cookie") },
     })
     .then(() => {
-      return redirect("/");
+      return redirect("/userSettings");
     })
-    .catch((error: any) => {
-      return null;
+    .catch((error: AxiosError) => {
+      const url = new URL(request.url);
+      const errorMessage = url.searchParams.get("errors");
+      if (errorMessage && errorMessage != "") {
+        return errorMessage;
+      }
+
+      if (error.status == 401) {
+        return null;
+      }
+
+      throw data(
+        {
+          status: 500,
+          message: error?.message,
+        },
+        { status: 500 }
+      );
     });
 }
 
@@ -27,7 +44,7 @@ export async function clientAction({ request }: Route.ActionArgs) {
 
   return baseApi
     .post("/auth/login", { email, password })
-    .then(() => redirect("/"))
+    .then(() => redirect("/userSettings"))
     .catch((error: any) => {
       if (error.response) {
         return {
@@ -46,9 +63,11 @@ export async function clientAction({ request }: Route.ActionArgs) {
     });
 }
 
-export default function Login({ actionData }: Route.ComponentProps) {
+export default function Login({
+  actionData,
+  loaderData,
+}: Route.ComponentProps) {
   const [showError, setShowError] = useState(true);
-
   useEffect(() => {
     setShowError(true);
   }, [actionData]);
@@ -107,9 +126,9 @@ export default function Login({ actionData }: Route.ComponentProps) {
                   </span>
                 </button>
                 <div className="m-4">
-                  {actionData?.message && showError && (
+                  {(actionData?.message || loaderData) && showError && (
                     <AlertError
-                      message={actionData.message}
+                      message={actionData?.message || loaderData}
                       onClose={() => setShowError(false)}
                     />
                   )}
