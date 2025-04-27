@@ -1,4 +1,4 @@
-import { redirect, Form, data, useSearchParams } from "react-router";
+import { redirect, Form, data } from "react-router";
 import { baseApi } from "../../api/axios";
 import { LoginInput } from "~/components/LoginInput";
 import type { Route } from "./+types/Login";

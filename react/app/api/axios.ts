@@ -2,7 +2,7 @@ import axios, { type AxiosRequestConfig } from "axios";
 
 // Base configuration
 const baseConfig = {
-  baseURL: "http://localhost:8080/v1/api",
+  baseURL: process.env.PUBLIC_API_URL || "http://localhost:8080/v1/api",
   withCredentials: true,
   headers: {
     "Content-Type": "application/json",
