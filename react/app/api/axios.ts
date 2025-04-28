@@ -1,4 +1,16 @@
-import axios, { type AxiosRequestConfig } from "axios";
+import axios, {
+  AxiosError,
+  type AxiosRequestConfig,
+  type AxiosResponse,
+} from "axios";
+
+export class ApiError extends Error {
+  constructor(message: string, public status: number) {
+    super(message);
+    this.name = "ApiError";
+    this.cause = status;
+  }
+}
 
 // Base configuration
 const baseConfig = {
@@ -11,6 +23,37 @@ const baseConfig = {
 
 // Create a client-side instance (used in browser)
 export const baseApi = axios.create(baseConfig);
+baseApi.interceptors.response.use(
+  (response: AxiosResponse) => response,
+  (error: AxiosError) => {
+    // Handle timeout errors
+    if (error.code === "ECONNABORTED") {
+      throw new ApiError("Request timed out. Please try again.", 408);
+    }
+
+    // Handle network errors
+    if (!error.response) {
+      throw new ApiError("Network error. Please check your connection.", 500);
+    }
+
+    // Extract error details from response
+    const status = error.response.status;
+    let message: string;
+
+    const data = error.response.data as any;
+    if (typeof data === "string") {
+      message = data;
+    } else if (data?.message) {
+      message = data.message;
+    } else if (data?.error) {
+      message = data.error;
+    } else {
+      message = `Request failed with status ${status}`;
+    }
+
+    throw new ApiError(message, status);
+  }
+);
 
 /**
  * Creates an API instance with the proper cookie handling for both client and server environments
