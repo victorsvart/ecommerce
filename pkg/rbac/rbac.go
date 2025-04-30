@@ -1,10 +1,13 @@
 package rbac
 
-import "slices"
+import (
+	"slices"
+)
 
 var (
 	RolePermissions = map[uint][]string{
 		UserRoleID: {
+			GetUser,
 			ListProduct,
 			GetProduct,
 			CreateProduct,

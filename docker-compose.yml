@@ -17,6 +17,15 @@ services:
       db:
         condition: service_healthy
 
+  # front:
+  #   build:
+  #     context: ./react/
+  #     dockerfile: Dockerfile
+  #   environment:
+  #     - PUBLIC_API_URL=http://ecommerce-app-1:8080/v1/api
+  #   ports:
+  #     - 3000:3000
+
   db:
     image: postgres
     restart: always
@@ -27,7 +36,7 @@ services:
       POSTGRES_PASSWORD: postgres
       POSTGRES_DB: ecommerce
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready"]
+      test: [ "CMD-SHELL", "pg_isready" ]
       interval: 10s
       timeout: 5s
       retries: 3

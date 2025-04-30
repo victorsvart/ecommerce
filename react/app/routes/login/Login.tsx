@@ -1,15 +1,17 @@
-import { redirect, Form, data, useSearchParams } from "react-router";
-import { baseApi } from "../../api/axios";
+import { redirect, Form, data } from "react-router";
+import { ApiError } from "../../api/axios";
 import { LoginInput } from "~/components/LoginInput";
 import type { Route } from "./+types/Login";
 import { AlertError } from "~/components/AlertError";
 import { useEffect, useState } from "react";
 import createApi from "../../api/axios";
 import type { AxiosError } from "axios";
+import { authService } from "~/service/auth/auth";
+import { ValidationError } from "~/errors/form-validator";
 
 export async function loader({ request }: Route.LoaderArgs) {
   const api = createApi(request.headers);
-  return api
+  return await api
     .get("/auth/me", {
       headers: { cookie: request.headers.get("cookie") },
     })
@@ -27,40 +29,33 @@ export async function loader({ request }: Route.LoaderArgs) {
         return null;
       }
 
-      throw data(
-        {
-          status: 500,
-          message: error?.message,
-        },
-        { status: 500 }
-      );
+      throw data({ status: error?.status, statusText: error?.message });
     });
 }
+export async function action({ request }: Route.ActionArgs) {
+  try {
+    const formData = await request.formData();
+    const result = await authService.login(formData);
 
-export async function clientAction({ request }: Route.ActionArgs) {
-  const formData = await request.formData();
-  const email = formData.get("email");
-  const password = formData.get("password");
-
-  return baseApi
-    .post("/auth/login", { email, password })
-    .then(() => redirect("/userSettings"))
-    .catch((error: any) => {
-      if (error.response) {
-        return {
-          status: error.response.status,
-          message: error.response.data,
-        };
-      }
-
-      throw data(
-        {
-          status: 404,
-          message: "Unknown error",
-        },
-        { status: 404 }
-      );
+    return redirect("/userSettings", {
+      headers: {
+        "Set-Cookie": result.cookies,
+      },
     });
+  } catch (error) {
+    if (error instanceof ValidationError || error instanceof ApiError) {
+      return data(
+        { success: false, message: error.message },
+        { status: error.cause as number }
+      );
+    }
+
+    console.error("Login error:", error);
+    return data(
+      { success: false, message: "An unexpected error occurred" },
+      { status: 500 }
+    );
+  }
 }
 
 export default function Login({
@@ -70,7 +65,7 @@ export default function Login({
   const [showError, setShowError] = useState(true);
   useEffect(() => {
     setShowError(true);
-  }, [actionData]);
+  }, [actionData?.message]);
 
   return (
     <div className="w-full">
@@ -94,7 +89,11 @@ export default function Login({
                 </h4>
               </div>
 
-              <Form method="post" className="shadow-md rounded-lg p-6">
+              <Form
+                method="post"
+                noValidate
+                className="shadow-md rounded-lg p-6"
+              >
                 <div className="text-center mb-4">
                   <h4 className="text-lg font-semibold text-gray-400">
                     Iniciar Sessão
