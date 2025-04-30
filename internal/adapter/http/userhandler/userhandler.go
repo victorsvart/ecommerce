@@ -3,12 +3,12 @@ package userhandler
 import (
 	"encoding/json"
 	"errors"
-	"log"
 	"net/http"
 	"strconv"
 
 	"github.com/go-chi/chi/v5"
 	"github.com/victorsvart/go-ecommerce/internal/core/domain"
+	"github.com/victorsvart/go-ecommerce/pkg/appcontext"
 	"github.com/victorsvart/go-ecommerce/pkg/middleware"
 	"github.com/victorsvart/go-ecommerce/pkg/rbac"
 	"github.com/victorsvart/go-ecommerce/pkg/utils"
@@ -25,21 +25,27 @@ type UserHandler struct {
 func NewUserHandler(api chi.Router, usecases domain.UserUseCases) {
 	handler := &UserHandler{usecases}
 	api.With(middleware.Auth).Route("/users", func(r chi.Router) {
-		r.With(middleware.Permission(rbac.GetUser)).Get("/", handler.List)
+		r.With(middleware.Permission(rbac.GetUser)).Get("/", handler.Get)
 		r.With(middleware.Permission(rbac.CreateUser)).Post("/", handler.Create)
 		r.With(middleware.Permission(rbac.UpdateUser)).Put("/", handler.Update)
 		r.With(middleware.Permission(rbac.DeleteUser)).Delete("/{id}", handler.Delete)
 	})
 }
 
-func (u *UserHandler) List(w http.ResponseWriter, r *http.Request) {
-	users, err := u.usecases.List(r.Context())
+func (u *UserHandler) Get(w http.ResponseWriter, r *http.Request) {
+	authCtx, err := appcontext.GetAuthContext(r.Context())
 	if err != nil {
-		utils.RespondJSON(w, http.StatusBadRequest, false, err.Error())
+		utils.RespondJSON(w, http.StatusUnauthorized, false, err.Error())
 		return
 	}
 
-	utils.RespondJSON(w, http.StatusOK, true, ToUserPresenterSlice(users))
+	user, err := u.usecases.GetById(r.Context(), authCtx.UserID)
+	if err != nil {
+		utils.RespondJSON(w, http.StatusUnauthorized, false, err.Error())
+		return
+	}
+
+	utils.RespondJSON(w, http.StatusOK, true, ToUserPresenter(user))
 }
 
 func (u *UserHandler) Create(w http.ResponseWriter, r *http.Request) {
@@ -50,7 +56,6 @@ func (u *UserHandler) Create(w http.ResponseWriter, r *http.Request) {
 	}
 
 	user := input.ToUser()
-	log.Println("VALUE")
 	if err := u.usecases.Create(r.Context(), &user); err != nil {
 		utils.RespondJSON(w, http.StatusConflict, false, err.Error())
 		return

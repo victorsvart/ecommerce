@@ -17,14 +17,14 @@ services:
       db:
         condition: service_healthy
 
-  front:
-    build:
-      context: ./react/
-      dockerfile: Dockerfile
-    environment:
-      - PUBLIC_API_URL=http://ecommerce-app-1:8080/v1/api
-    ports:
-      - 3000:3000
+  # front:
+  #   build:
+  #     context: ./react/
+  #     dockerfile: Dockerfile
+  #   environment:
+  #     - PUBLIC_API_URL=http://ecommerce-app-1:8080/v1/api
+  #   ports:
+  #     - 3000:3000
 
   db:
     image: postgres
