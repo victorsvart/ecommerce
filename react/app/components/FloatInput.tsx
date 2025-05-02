@@ -7,6 +7,7 @@ type FloatInputProps = {
   error?: string;
   name: string;
   required?: boolean;
+  value?: string;
 };
 
 const FloatInput: React.FC<FloatInputProps> = ({
@@ -16,10 +17,12 @@ const FloatInput: React.FC<FloatInputProps> = ({
   error,
   name,
   required,
+  value = "",
 }) => {
   return (
     <div className="relative">
       <input
+        value={value}
         type={type}
         id={id}
         name={name}

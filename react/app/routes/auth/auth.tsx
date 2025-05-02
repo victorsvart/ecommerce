@@ -1,6 +1,7 @@
 import { Outlet, redirect } from "react-router";
 import type { Route } from "../../+types/root";
 import createApi from "~/api/axios";
+import { Navbar } from "~/components/Nav";
 
 export async function loader({ request }: Route.LoaderArgs) {
   const api = createApi(request.headers);
@@ -8,9 +9,7 @@ export async function loader({ request }: Route.LoaderArgs) {
     .get("/auth/me", {
       headers: { cookie: request.headers.get("cookie") },
     })
-    .then(() => {
-      return null;
-    })
+    .then(() => null)
     .catch((error: any) => {
       const params = new URLSearchParams({
         errors: "Session expired. Please login again.",
@@ -20,5 +19,12 @@ export async function loader({ request }: Route.LoaderArgs) {
 }
 
 export default function Authenticated({ loaderData }: Route.ComponentProps) {
-  return <Outlet />;
+  return (
+    <div className="min-h-screen w-full bg-gray-900 text-white">
+      <Navbar />
+      <main className="w-full">
+        <Outlet />
+      </main>
+    </div>
+  );
 }
