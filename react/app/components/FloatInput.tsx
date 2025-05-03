@@ -22,7 +22,7 @@ const FloatInput: React.FC<FloatInputProps> = ({
   return (
     <div className="relative">
       <input
-        value={value}
+        defaultValue={value}
         type={type}
         id={id}
         name={name}

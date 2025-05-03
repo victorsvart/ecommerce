@@ -36,7 +36,8 @@ func (u *userRepositoryImpl) emailInUse(ctx context.Context, id *uint64, address
 }
 
 var (
-	ErrEmailInUse   = errors.New("email is in use")
-	ErrUserNotFound = errors.New("user not found")
-	ErrIDRequired   = errors.New("id is required")
+	ErrEmailInUse    = errors.New("email is in use")
+	ErrUserNotFound  = errors.New("user not found")
+	ErrIDRequired    = errors.New("id is required")
+	ErrEmailRequired = errors.New("email is required")
 )
