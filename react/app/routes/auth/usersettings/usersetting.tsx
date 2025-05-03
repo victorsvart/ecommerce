@@ -14,6 +14,7 @@ export interface UserSettings {
   name: string;
   surname: string;
   email: string;
+  contact: string;
 }
 
 export async function loader({ request }: Route.LoaderArgs) {

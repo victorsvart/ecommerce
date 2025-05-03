@@ -7,6 +7,7 @@ type UserPresenter struct {
 	Name     string `json:"name"`
 	Surname  string `json:"surname"`
 	Email    string `json:"email"`
+	Contact  string `json:"contact"`
 }
 
 func ToUserPresenter(u *domain.User) UserPresenter {
@@ -15,6 +16,7 @@ func ToUserPresenter(u *domain.User) UserPresenter {
 		Name:     u.Name,
 		Surname:  u.Surname,
 		Email:    u.Email,
+		Contact:  u.Contact,
 	}
 }
 

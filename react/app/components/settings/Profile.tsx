@@ -27,7 +27,7 @@ export default function Profile({ user }: { user: UserSettings }) {
         <div className="md:col-span-2">
           <label className="text-sm text-gray-400">Contato</label>
           <input
-            value={user.name}
+            value={user.contact}
             className="w-full p-2 bg-gray-700 border border-gray-600 rounded-md text-white"
           />
         </div>
