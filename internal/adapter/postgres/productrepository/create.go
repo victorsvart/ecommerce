@@ -4,7 +4,7 @@ import (
 	"context"
 	"errors"
 
-	"github.com/victorsvart/go-ecommerce/internal/core/domain"
+	"github.com/victorsvart/egommerce/internal/core/domain"
 	"gorm.io/gorm"
 )
 

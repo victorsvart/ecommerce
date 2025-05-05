@@ -3,7 +3,7 @@ package productusecase
 import (
 	"context"
 
-	"github.com/victorsvart/go-ecommerce/internal/core/domain"
+	"github.com/victorsvart/egommerce/internal/core/domain"
 )
 
 func (u *productUseCase) Create(ctx context.Context, product *domain.Product) error {

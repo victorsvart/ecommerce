@@ -3,7 +3,7 @@ package productusecase
 import (
 	"context"
 
-	"github.com/victorsvart/go-ecommerce/internal/core/domain"
+	"github.com/victorsvart/egommerce/internal/core/domain"
 )
 
 func (p *productUseCase) GetByUserID(ctx context.Context, id uint64) (*domain.Product, error) {

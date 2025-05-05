@@ -4,7 +4,7 @@ import (
 	"context"
 	"time"
 
-	"github.com/victorsvart/go-ecommerce/pkg/rbac"
+	"github.com/victorsvart/egommerce/pkg/rbac"
 )
 
 type User struct {

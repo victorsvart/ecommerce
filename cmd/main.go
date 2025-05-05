@@ -10,8 +10,8 @@ import (
 	"github.com/go-chi/chi/v5"
 	"github.com/go-chi/chi/v5/middleware"
 	"github.com/go-chi/cors"
-	"github.com/victorsvart/go-ecommerce/internal/adapter/postgres"
-	"github.com/victorsvart/go-ecommerce/internal/wiring"
+	"github.com/victorsvart/egommerce/internal/adapter/postgres"
+	"github.com/victorsvart/egommerce/internal/wiring"
 )
 
 func setupApiBase() chi.Router {

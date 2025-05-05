@@ -1,8 +1,8 @@
 package authentication
 
 import (
-	"github.com/victorsvart/go-ecommerce/internal/core/domain"
-	"github.com/victorsvart/go-ecommerce/pkg/rbac"
+	"github.com/victorsvart/egommerce/internal/core/domain"
+	"github.com/victorsvart/egommerce/pkg/rbac"
 )
 
 type LoginInput struct {

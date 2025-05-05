@@ -1,4 +1,4 @@
-module github.com/victorsvart/go-ecommerce
+module github.com/victorsvart/egommerce
 
 go 1.24.2
 

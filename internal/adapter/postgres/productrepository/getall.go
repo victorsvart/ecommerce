@@ -3,7 +3,7 @@ package productrepository
 import (
 	"context"
 
-	"github.com/victorsvart/go-ecommerce/internal/core/domain"
+	"github.com/victorsvart/egommerce/internal/core/domain"
 )
 
 func (p *productRepositoryImpl) GetAll(ctx context.Context) ([]domain.Product, error) {

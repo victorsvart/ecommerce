@@ -1,6 +1,6 @@
 package producthandler
 
-import "github.com/victorsvart/go-ecommerce/internal/core/domain"
+import "github.com/victorsvart/egommerce/internal/core/domain"
 
 type ProductPresenter struct {
 	ID       uint64 `json:"id"`

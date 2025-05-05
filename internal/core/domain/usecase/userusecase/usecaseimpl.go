@@ -1,6 +1,6 @@
 package userusecase
 
-import "github.com/victorsvart/go-ecommerce/internal/core/domain"
+import "github.com/victorsvart/egommerce/internal/core/domain"
 
 type userUseCaseImpl struct {
 	repo domain.UserRepository
