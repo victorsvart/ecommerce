@@ -23,8 +23,10 @@ const baseConfig = {
 
 // Create a client-side instance (used in browser)
 export const baseApi = axios.create(baseConfig);
+
+// Error interceptor
 baseApi.interceptors.response.use(
-  (response: AxiosResponse) => response,
+  (response: Promise<AxiosResponse>) => response,
   (error: AxiosError) => {
     // Handle timeout errors
     if (error.code === "ECONNABORTED") {

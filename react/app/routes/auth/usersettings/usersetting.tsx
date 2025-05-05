@@ -1,10 +1,16 @@
-import createApi, { ApiError } from "~/api/axios";
+import makeApi, { ApiError } from "~/api/axios";
 import type { Route } from "./+types/usersetting";
-import Profile from "~/components/settings/Profile";
-import { data, redirect, useActionData } from "react-router";
+import Profile, { SkeletonProfile } from "~/components/settings/Profile";
+import {
+  Await,
+  data,
+  redirect,
+  useActionData,
+  useRouteError,
+} from "react-router";
 import { ValidateForm } from "~/errors/form-validator";
 import { z } from "zod";
-import { useEffect, useState } from "react";
+import { Suspense, useEffect, useState } from "react";
 import { AlertError } from "~/components/AlertError";
 
 export interface LoaderData {
@@ -22,8 +28,8 @@ export interface UserSettings {
 }
 
 const UserEdit = z.object({
-  name: z.string(),
-  surname: z.string(),
+  name: z.string().min(1, "Nome é obrigatório!"),
+  surname: z.string().min(1, "Sobrenome é obrigatório!"),
   email: z.string().email("Email inválido"),
   contact: z.string().regex(/^\(\d{2}\)\s9\d{4}-\d{4}$/, {
     message: "Número de telefone inválido",
@@ -31,77 +37,52 @@ const UserEdit = z.object({
 });
 
 export async function loader({ request }: Route.LoaderArgs) {
-  const api = createApi(request.headers);
-  return await api
-    .get("/users", {
-      headers: { cookie: request.headers.get("cookie") },
-    })
-    .then((res) => {
-      return data({
-        data: res.data as UserSettings,
-        status: 200,
-        statusText: null,
-      } as LoaderData);
-    })
-    .catch((error) => {
-      if (error instanceof ApiError) {
-        return data({
-          data: null,
-          status: error.cause,
-          statusText: error.message,
-        } as LoaderData);
-      }
+  const api = makeApi(request.headers);
+  return {
+    userPromise: api
+      .get("/users")
+      .then((response) => response.data as UserSettings),
+  };
+}
+export async function action({ request }: Route.ActionArgs) {
+  const formData = await request.formData();
+  const result = await ValidateForm(UserEdit, formData);
+  if (!result.success) {
+    return data({
+      data: null,
+      status: 400,
+      statusText: "Validation failed",
+    });
+  }
 
-      console.error("error:", error);
+  const { name, surname, email, contact } = result.data;
+  const api = makeApi(request.headers);
+
+  try {
+    await api.put("/users", { name, surname, email, contact });
+    return redirect("/userSettings");
+  } catch (error) {
+    if (error instanceof ApiError) {
       return data({
         data: null,
         status: error.cause,
         statusText: error.message,
-      } as LoaderData);
+      });
+    }
+
+    console.error("Unexpected error:", error);
+    return data({
+      data: null,
+      status: 500,
+      statusText: "Unexpected error",
     });
-}
-
-export async function action({ request }: Route.ActionArgs) {
-  const formData = await request.formData();
-  let result = await ValidateForm(UserEdit, formData);
-  const input = result.data;
-
-  const api = createApi();
-  return await api
-    .put(
-      "/users",
-      {
-        name: input.name,
-        surname: input.surname,
-        email: input.email,
-        contact: input.contact,
-      },
-      {
-        headers: { cookie: request.headers.get("cookie") },
-      }
-    )
-    .then(() => redirect("/userSettings"))
-    .catch((error) => {
-      if (error instanceof ApiError) {
-        return data({
-          data: null as UserSettings | null,
-          status: error.cause,
-          statusText: error.message,
-        } as LoaderData);
-      }
-
-      console.error("error:", error);
-      return data({
-        data: null as UserSettings | null,
-        status: error.cause,
-        statusText: error.message,
-      } as LoaderData);
-    });
+  }
 }
 
 export default function UserSettings({ loaderData }: Route.ComponentProps) {
-  const actionData = useActionData<LoaderData>();
+  const actionData = useActionData<{ statusText: string }>();
   const [showError, setShowError] = useState(true);
+
   useEffect(() => {
     setShowError(true);
   }, [actionData]);
@@ -110,16 +91,36 @@ export default function UserSettings({ loaderData }: Route.ComponentProps) {
     <div className="min-h-screen bg-gray-900 text-white p-10">
       <div className="max-w-3xl mx-auto">
         <h1 className="text-2xl font-semibold mb-6">Perfil</h1>
-        <Profile user={loaderData.data} />
+
+        <Suspense fallback={<SkeletonProfile />}>
+          <Await
+            resolve={loaderData.userPromise}
+            errorElement={<ErrorBoundary />}
+          >
+            {(res) => <Profile user={res} />}
+          </Await>
+        </Suspense>
       </div>
-      <div className="m-4">
-        {actionData?.statusText && showError && (
+
+      {actionData?.statusText && showError && (
+        <div className="m-4">
           <AlertError
             message={actionData.statusText}
             onClose={() => setShowError(false)}
           />
-        )}
-      </div>
+        </div>
+      )}
+    </div>
+  );
+}
+
+function ErrorBoundary() {
+  const error = useRouteError();
+  return (
+    <div className="text-red-500 p-4">
+      Error loading user data:
+      {error instanceof Error ? error.message : "Unknown error"}
+      {error instanceof ApiError ? error.message : "Unknown error"}
     </div>
   );
 }

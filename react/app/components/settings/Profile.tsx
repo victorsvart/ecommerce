@@ -1,12 +1,35 @@
 import type { UserSettings } from "~/routes/auth/usersettings/usersetting";
-import { Form } from "react-router";
+import { Form, useAsyncValue } from "react-router";
+import { Skeleton } from "../Skeleton";
 
-export default function Profile({ user }: { user: UserSettings | null }) {
+export function SkeletonProfile() {
   return (
     <div className="flex flex-col md:flex-row bg-gray-800 p-6 rounded-lg shadow-lg gap-8">
       <div className="flex flex-col items-center">
-        <div className="w-24 h-24 rounded-full bg-gray-700 flex items-center justify-center text-2xl font-bold">
-          {user?.name?.[0]?.toUpperCase()}
+        <Skeleton className="w-24 h-24 rounded-full" />
+        <Skeleton className="mt-4 h-4 w-20" />
+      </div>
+      <div className="grid grid-cols-1 md:col-span-2 gap-4 flex-1">
+        <Skeleton className="h-10 w-full" />
+        <Skeleton className="h-10 w-full" />
+        <Skeleton className="h-10 w-full" />
+        <Skeleton className="h-10 w-full" />
+        <Skeleton className="h-20 w-full" />
+        <div className="flex justify-between">
+          <Skeleton className="h-8 w-32" />
+          <Skeleton className="h-8 w-24" />
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function ProfileForm({ user }: { user: UserSettings }) {
+  return (
+    <div className="flex flex-col md:flex-row bg-gray-800 p-6 rounded-lg shadow-lg gap-8">
+      <div className="flex flex-col items-center">
+        <div className="w-24 h-24 rounded-full bg-gray-700 flex items-center justify-center text-2xl font-bold text-white">
+          {user.name?.[0]?.toUpperCase()}
         </div>
         <button className="mt-4 text-sm text-red-400 hover:text-red-500">
           Remove photo
@@ -23,33 +46,32 @@ export default function Profile({ user }: { user: UserSettings | null }) {
           <input
             readOnly
             name="email"
-            defaultValue={user?.email}
+            defaultValue={user.email}
             className="w-full p-2 bg-gray-700 cursor-default rounded-md text-white brightness-50"
           />
           <p className="text-xs text-gray-500 mt-1">
             * Você não pode mudar seu email diretamente
           </p>
         </div>
-        <div className=" md:col-span-2">
+        <div className="md:col-span-2">
           <label className="text-sm text-gray-400">Contato</label>
           <input
-            key="contact"
             name="contact"
-            defaultValue={user?.contact}
+            defaultValue={user.contact}
             className="w-full p-2 bg-gray-700 border border-gray-600 rounded-md text-white"
           />
         </div>
 
         {[
-          { label: "Primeiro nome", name: "name", value: user?.name },
-          { label: "Sobrenome", name: "surname", value: user?.surname },
+          { label: "Primeiro nome", name: "name", value: user.name },
+          { label: "Sobrenome", name: "surname", value: user.surname },
         ].map(({ label, name, value }, i) => (
           <div key={i}>
             <label className="text-sm text-gray-400">{label}</label>
             <input
               name={name}
               defaultValue={value}
-              className="w-full p-2 bg-gray-700 border border-gray-600 rounded-md text-wvhite"
+              className="w-full p-2 bg-gray-700 border border-gray-600 rounded-md text-white"
             />
           </div>
         ))}
@@ -83,4 +105,12 @@ export default function Profile({ user }: { user: UserSettings | null }) {
       </Form>
     </div>
   );
+}
+
+export default function Profile({ user }: { user: UserSettings | null }) {
+  if (!user) {
+    return <SkeletonProfile />;
+  }
+
+  return <ProfileForm user={user} />;
 }
