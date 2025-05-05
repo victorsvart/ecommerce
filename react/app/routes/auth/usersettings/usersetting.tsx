@@ -8,7 +8,7 @@ import {
   useActionData,
   useRouteError,
 } from "react-router";
-import { ValidateForm } from "~/errors/form-validator";
+import { ValidateForm, ValidationError } from "~/errors/form-validator";
 import { z } from "zod";
 import { Suspense, useEffect, useState } from "react";
 import { AlertError } from "~/components/AlertError";
@@ -46,23 +46,15 @@ export async function loader({ request }: Route.LoaderArgs) {
 }
 export async function action({ request }: Route.ActionArgs) {
   const formData = await request.formData();
-  const result = await ValidateForm(UserEdit, formData);
-  if (!result.success) {
-    return data({
-      data: null,
-      status: 400,
-      statusText: "Validation failed",
-    });
-  }
-
-  const { name, surname, email, contact } = result.data;
-  const api = makeApi(request.headers);
-
   try {
+    const result = await ValidateForm(UserEdit, formData);
+    const { name, surname, email, contact } = result.data;
+    const api = makeApi(request.headers);
+
     await api.put("/users", { name, surname, email, contact });
     return redirect("/userSettings");
   } catch (error) {
-    if (error instanceof ApiError) {
+    if (error instanceof ApiError || error instanceof ValidationError) {
       return data({
         data: null,
         status: error.cause,
@@ -80,7 +72,8 @@ export async function action({ request }: Route.ActionArgs) {
 }
 
 export default function UserSettings({ loaderData }: Route.ComponentProps) {
-  const actionData = useActionData<{ statusText: string }>();
+  const actionData = useActionData();
+  console.log(actionData);
   const [showError, setShowError] = useState(true);
 
   useEffect(() => {
@@ -93,34 +86,20 @@ export default function UserSettings({ loaderData }: Route.ComponentProps) {
         <h1 className="text-2xl font-semibold mb-6">Perfil</h1>
 
         <Suspense fallback={<SkeletonProfile />}>
-          <Await
-            resolve={loaderData.userPromise}
-            errorElement={<ErrorBoundary />}
-          >
+          <Await resolve={loaderData.userPromise}>
             {(res) => <Profile user={res} />}
           </Await>
         </Suspense>
       </div>
 
       {actionData?.statusText && showError && (
-        <div className="m-4">
+        <div className="w-94 mx-auto mt-4">
           <AlertError
             message={actionData.statusText}
             onClose={() => setShowError(false)}
           />
         </div>
       )}
-    </div>
-  );
-}
-
-function ErrorBoundary() {
-  const error = useRouteError();
-  return (
-    <div className="text-red-500 p-4">
-      Error loading user data:
-      {error instanceof Error ? error.message : "Unknown error"}
-      {error instanceof ApiError ? error.message : "Unknown error"}
     </div>
   );
 }
