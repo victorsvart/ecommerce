@@ -73,7 +73,6 @@ export async function action({ request }: Route.ActionArgs) {
 
 export default function UserSettings({ loaderData }: Route.ComponentProps) {
   const actionData = useActionData();
-  console.log(actionData);
   const [showError, setShowError] = useState(true);
 
   useEffect(() => {
