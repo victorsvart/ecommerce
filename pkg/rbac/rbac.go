@@ -8,6 +8,7 @@ var (
 	RolePermissions = map[uint][]string{
 		UserRoleID: {
 			GetUser,
+			UpdateUser,
 			ListProduct,
 			GetProduct,
 			CreateProduct,

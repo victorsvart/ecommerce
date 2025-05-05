@@ -13,6 +13,7 @@ type User struct {
 	Surname   string `gorm:"size:255"`
 	Email     string `gorm:"unique;size:255"`
 	Password  string `gorm:"size:255"`
+	Contact   string `gorm:"size:255"`
 	RoleID    uint
 	Products  []Product
 	CreatedAt time.Time
@@ -43,6 +44,7 @@ type UserInput struct {
 	Surname  string  `json:"surname"`
 	Email    string  `json:"email"`
 	Password string  `json:"password"`
+	Contact  string  `json:"contact"`
 }
 
 func (u *UserInput) ToUser() User {
@@ -56,6 +58,7 @@ func (u *UserInput) ToUser() User {
 		Name:     u.Name,
 		Surname:  u.Surname,
 		Email:    u.Email,
+		Contact:  u.Contact,
 		Password: u.Password,
 		RoleID:   rbac.UserRoleID,
 	}

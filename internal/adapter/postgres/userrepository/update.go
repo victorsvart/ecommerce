@@ -12,7 +12,7 @@ func (u *userRepositoryImpl) Update(ctx context.Context, user *domain.User) erro
 	}
 
 	tx := u.db.Model(&domain.User{}).
-		Omit("password").
+		Omit("password", "id", "role_id", "email").
 		Where("id = ?", user.ID).
 		Updates(user).
 		Scan(&user)

@@ -44,6 +44,7 @@ func SeedAdmin(db *gorm.DB) {
 		Name:     "admin",
 		Surname:  "admin",
 		Email:    email,
+		Contact:  "(21) 98873-3943",
 		RoleID:   rbac.AdminRoleID,
 		Password: password,
 	}
@@ -77,6 +78,7 @@ func SeedSampleUser(db *gorm.DB) {
 		Name:     "Victor",
 		Surname:  "Moraes",
 		Email:    email,
+		Contact:  "(21) 98873-9942",
 		RoleID:   rbac.UserRoleID,
 		Password: password,
 	}

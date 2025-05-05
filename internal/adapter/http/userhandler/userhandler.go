@@ -71,9 +71,16 @@ func (u *UserHandler) Update(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	authCtx, err := appcontext.GetAuthContext(r.Context())
+	if err != nil {
+		utils.RespondJSON(w, http.StatusUnprocessableEntity, false, err.Error())
+		return
+	}
+
+	input.ID = &authCtx.UserID
 	user := input.ToUser()
 	if err := u.usecases.Update(r.Context(), &user); err != nil {
-		utils.RespondJSON(w, http.StatusBadGateway, false, err.Error())
+		utils.RespondJSON(w, http.StatusBadRequest, false, err.Error())
 		return
 	}
 

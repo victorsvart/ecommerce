@@ -8,7 +8,7 @@ export const AlertError: React.FC<AlertErrorProps> = ({ message, onClose }) => {
 
   return (
     <div
-      className="flex items-start p-4 mb-4 text-sm text-red-800 border border-red-300 rounded-lg bg-red-50 dark:bg-gray-800 dark:text-red-400 dark:border-red-800"
+      className="animate-fade-in flex items-start p-4 mb-4 text-sm text-red-800 border border-red-300 rounded-lg bg-red-50 dark:bg-gray-800 dark:text-red-400 dark:border-red-800"
       role="alert"
     >
       <svg
