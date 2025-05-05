@@ -1,6 +1,7 @@
-import type { UserSettings } from "~/routes/auth/usersettings/usersetting";
-import { Form, useAsyncValue } from "react-router";
+import type { UserSettings } from "~/routes/auth/usersettings/usersettings";
+import { Form } from "react-router";
 import { Skeleton } from "../Skeleton";
+import { useState } from "react";
 
 export function SkeletonProfile() {
   return (
@@ -25,6 +26,8 @@ export function SkeletonProfile() {
 }
 
 function ProfileForm({ user }: { user: UserSettings }) {
+  const [formChanged, setFormChanged] = useState(false);
+
   return (
     <div className="flex flex-col md:flex-row bg-gray-800 p-6 rounded-lg shadow-lg gap-8">
       <div className="flex flex-col items-center">
@@ -58,6 +61,7 @@ function ProfileForm({ user }: { user: UserSettings }) {
           <input
             name="contact"
             defaultValue={user.contact}
+            onChange={() => setFormChanged(true)}
             className="w-full p-2 bg-gray-700 border border-gray-600 rounded-md text-white"
           />
         </div>
@@ -71,6 +75,7 @@ function ProfileForm({ user }: { user: UserSettings }) {
             <input
               name={name}
               defaultValue={value}
+              onChange={() => setFormChanged(true)}
               className="w-full p-2 bg-gray-700 border border-gray-600 rounded-md text-white"
             />
           </div>
@@ -80,6 +85,7 @@ function ProfileForm({ user }: { user: UserSettings }) {
           <label className="text-sm text-gray-400">Bio</label>
           <textarea
             rows={3}
+            onChange={() => setFormChanged(true)}
             placeholder="Fale sobre você..."
             className="w-full p-2 bg-gray-700 border border-gray-600 rounded-md text-white resize-none"
           />
@@ -96,8 +102,9 @@ function ProfileForm({ user }: { user: UserSettings }) {
             <p>Exibir perfil público</p>
           </a>
           <button
+            disabled={!formChanged}
             type="submit"
-            className="bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 px-4 rounded-md"
+            className="bg-blue-600 hover:bg-blue-700 disabled:bg-gray-700 disabled:cursor-not-allowed text-white font-medium py-2 px-4 rounded-md transition-all duration-300 ease-in-out"
           >
             Salvar
           </button>

@@ -9,6 +9,6 @@ export default [
   index("routes/home.tsx"),
   route("login", "./routes/login/Login.tsx"),
   layout("./routes/auth/auth.tsx", [
-    route("userSettings", "./routes/auth/usersettings/usersetting.tsx"),
+    route("userSettings", "./routes/auth/usersettings/usersettings.tsx"),
   ]),
 ] satisfies RouteConfig;
