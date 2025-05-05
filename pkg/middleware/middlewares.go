@@ -5,9 +5,9 @@ import (
 	"errors"
 	"net/http"
 
-	"github.com/victorsvart/go-ecommerce/pkg/appcontext"
-	"github.com/victorsvart/go-ecommerce/pkg/rbac"
-	"github.com/victorsvart/go-ecommerce/pkg/token"
+	"github.com/victorsvart/egommerce/pkg/appcontext"
+	"github.com/victorsvart/egommerce/pkg/rbac"
+	"github.com/victorsvart/egommerce/pkg/token"
 )
 
 var (

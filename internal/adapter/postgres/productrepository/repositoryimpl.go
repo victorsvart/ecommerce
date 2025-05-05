@@ -4,9 +4,9 @@ import (
 	"context"
 	"errors"
 
-	"github.com/victorsvart/go-ecommerce/internal/core/domain"
-	"github.com/victorsvart/go-ecommerce/pkg/appcontext"
-	"github.com/victorsvart/go-ecommerce/pkg/rbac"
+	"github.com/victorsvart/egommerce/internal/core/domain"
+	"github.com/victorsvart/egommerce/pkg/appcontext"
+	"github.com/victorsvart/egommerce/pkg/rbac"
 	"gorm.io/gorm"
 )
 

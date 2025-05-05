@@ -3,7 +3,7 @@ package userusecase
 import (
 	"context"
 
-	"github.com/victorsvart/go-ecommerce/internal/core/domain"
+	"github.com/victorsvart/egommerce/internal/core/domain"
 )
 
 func (u *userUseCaseImpl) GetByEmail(ctx context.Context, email string) (*domain.User, error) {

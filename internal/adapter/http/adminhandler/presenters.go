@@ -1,6 +1,6 @@
 package adminhandler
 
-import "github.com/victorsvart/go-ecommerce/internal/core/domain"
+import "github.com/victorsvart/egommerce/internal/core/domain"
 
 type UserPresenter struct {
 	ID       uint64 `json:"id"`

@@ -2,15 +2,15 @@ package wiring
 
 import (
 	"github.com/go-chi/chi/v5"
-	"github.com/victorsvart/go-ecommerce/internal/adapter/http/adminhandler"
-	"github.com/victorsvart/go-ecommerce/internal/adapter/http/producthandler"
-	"github.com/victorsvart/go-ecommerce/internal/adapter/http/userhandler"
-	"github.com/victorsvart/go-ecommerce/internal/adapter/postgres/productrepository"
-	"github.com/victorsvart/go-ecommerce/internal/adapter/postgres/userrepository"
-	"github.com/victorsvart/go-ecommerce/internal/authentication"
-	"github.com/victorsvart/go-ecommerce/internal/core/domain"
-	"github.com/victorsvart/go-ecommerce/internal/core/domain/usecase/productusecase"
-	"github.com/victorsvart/go-ecommerce/internal/core/domain/usecase/userusecase"
+	"github.com/victorsvart/egommerce/internal/adapter/http/adminhandler"
+	"github.com/victorsvart/egommerce/internal/adapter/http/producthandler"
+	"github.com/victorsvart/egommerce/internal/adapter/http/userhandler"
+	"github.com/victorsvart/egommerce/internal/adapter/postgres/productrepository"
+	"github.com/victorsvart/egommerce/internal/adapter/postgres/userrepository"
+	"github.com/victorsvart/egommerce/internal/authentication"
+	"github.com/victorsvart/egommerce/internal/core/domain"
+	"github.com/victorsvart/egommerce/internal/core/domain/usecase/productusecase"
+	"github.com/victorsvart/egommerce/internal/core/domain/usecase/userusecase"
 	"gorm.io/gorm"
 )
 

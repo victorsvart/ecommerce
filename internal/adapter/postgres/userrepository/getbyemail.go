@@ -3,8 +3,8 @@ package userrepository
 import (
 	"context"
 
-	"github.com/victorsvart/go-ecommerce/internal/core/domain"
-	"github.com/victorsvart/go-ecommerce/pkg/utils"
+	"github.com/victorsvart/egommerce/internal/core/domain"
+	"github.com/victorsvart/egommerce/pkg/utils"
 )
 
 func (u *userRepositoryImpl) GetByEmail(ctx context.Context, email string) (*domain.User, error) {

@@ -6,9 +6,9 @@ import (
 	"os"
 	"path/filepath"
 
-	"github.com/victorsvart/go-ecommerce/internal/core/domain"
-	"github.com/victorsvart/go-ecommerce/pkg/rbac"
-	"github.com/victorsvart/go-ecommerce/pkg/utils"
+	"github.com/victorsvart/egommerce/internal/core/domain"
+	"github.com/victorsvart/egommerce/pkg/rbac"
+	"github.com/victorsvart/egommerce/pkg/utils"
 	"gorm.io/gorm"
 )
 

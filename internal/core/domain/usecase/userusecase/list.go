@@ -3,7 +3,7 @@ package userusecase
 import (
 	"context"
 
-	"github.com/victorsvart/go-ecommerce/internal/core/domain"
+	"github.com/victorsvart/egommerce/internal/core/domain"
 )
 
 func (u *userUseCaseImpl) List(ctx context.Context) ([]domain.User, error) {

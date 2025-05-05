@@ -10,11 +10,11 @@ import (
 	"time"
 
 	"github.com/go-chi/chi/v5"
-	"github.com/victorsvart/go-ecommerce/internal/core/domain"
-	"github.com/victorsvart/go-ecommerce/pkg/appcontext"
-	"github.com/victorsvart/go-ecommerce/pkg/middleware"
-	"github.com/victorsvart/go-ecommerce/pkg/token"
-	"github.com/victorsvart/go-ecommerce/pkg/utils"
+	"github.com/victorsvart/egommerce/internal/core/domain"
+	"github.com/victorsvart/egommerce/pkg/appcontext"
+	"github.com/victorsvart/egommerce/pkg/middleware"
+	"github.com/victorsvart/egommerce/pkg/token"
+	"github.com/victorsvart/egommerce/pkg/utils"
 )
 
 const (
