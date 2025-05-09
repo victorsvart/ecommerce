@@ -40,5 +40,14 @@
     "imageUrl": "https://cdn.awsli.com.br/2500x2500/1919/1919257/produto/130225667/01df7cc858.jpg",
     "description": "O console mais poderoso da Microsoft com 1TB de armazenamento SSD. Aproveite gráficos em até 4K, taxa de quadros de até 120FPS e compatibilidade com várias gerações do Xbox. Ideal para jogadores que buscam desempenho e qualidade de imagem.",
     "userId": 2
+  },
+  {
+    "id": 6,
+    "name": "Monitor Gamer LG UltraGear 24' FHD, IPS, 180Hz, 1ms GTG, HDR10, DisplayPort e HDMI, AMD FreeSync, NVIDIA G-SYNC, Preto - 24GS60F-B",
+    "price": 1222.21,
+    "discountPercentage": 10,
+    "imageUrl": "https://images9.kabum.com.br/produtos/fotos/614879/monitor-gamer-lg-ultragear-24-full-hd-ips-180hz-1ms-displayport-e-hdmi-nvidia-g-sync-amd-freesync-hdr10-srgb-99-24gs60f-b_1722881105_m.jpg",
+    "description": "Sinta a diferença que um verdadeiro monitor gamer pode fazer! O LG UltraGear 24' 24GS60F-B eleva sua experiência de jogo a um novo patamar com sua incrível taxa de atualização de 180Hz. Diga adeus ao lag e ao ghosting e prepare-se para uma jogabilidade ultra fluida e responsiva, onde cada milissegundo conta para a sua vitória!",
+    "userId": 2
   }
 ]

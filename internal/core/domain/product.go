@@ -14,7 +14,7 @@ type Product struct {
 
 type ProductRepository interface {
 	Get(context.Context, uint64) (*Product, error)
-	GetAll(context.Context) ([]Product, error)
+	GetAll(context.Context, string) ([]Product, error)
 	GetByUserID(ctx context.Context, id uint64) (*Product, error)
 	Create(context.Context, *Product) error
 	Update(context.Context, *Product) error
@@ -23,7 +23,7 @@ type ProductRepository interface {
 
 type ProductUsecases interface {
 	Get(context.Context, uint64) (*Product, error)
-	GetAll(context.Context) ([]Product, error)
+	GetAll(context.Context, string) ([]Product, error)
 	GetByUserID(ctx context.Context, id uint64) (*Product, error)
 	Create(context.Context, *Product) error
 	Update(context.Context, *Product) error

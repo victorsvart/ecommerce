@@ -29,7 +29,7 @@ export function ProductCard({
       <div className="flex flex-col flex-grow p-5 gap-3">
         <a href={href}>
           <h3 className="text-lg font-semibold text-gray-800 dark:text-white hover:underline">
-            {name}
+            {name.substring(0, Math.min(46, name.length))}
           </h3>
         </a>
         <p className="text-sm text-gray-600 dark:text-gray-400 line-clamp-2">

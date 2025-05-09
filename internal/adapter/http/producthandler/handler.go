@@ -3,6 +3,7 @@ package producthandler
 import (
 	"encoding/json"
 	"errors"
+	"log"
 	"net/http"
 	"strconv"
 
@@ -52,7 +53,9 @@ func (p *ProductHandler) GetById(w http.ResponseWriter, r *http.Request) {
 }
 
 func (p *ProductHandler) GetAll(w http.ResponseWriter, r *http.Request) {
-	products, err := p.usecases.GetAll(r.Context())
+	filterText := r.URL.Query().Get("filterText")
+	log.Println(filterText)
+	products, err := p.usecases.GetAll(r.Context(), filterText)
 	if err != nil {
 		utils.RespondJSON(w, http.StatusInternalServerError, false, err.Error())
 		return
