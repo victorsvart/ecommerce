@@ -3,10 +3,13 @@ package domain
 import "context"
 
 type Product struct {
-	ID       uint64
-	Name     string
-	ImageURL string
-	UserID   uint64
+	ID                 uint64
+	Name               string
+	ImageURL           string
+	Price              float64
+	DiscountPercentage *uint16
+	Description        string
+	UserID             uint64
 }
 
 type ProductRepository interface {
@@ -28,10 +31,13 @@ type ProductUsecases interface {
 }
 
 type ProductInput struct {
-	ID       *uint64 `json:"id"`
-	Name     string  `json:"name"`
-	ImageURL string  `json:"imageUrl"`
-	UserID   uint64  `json:"userId"`
+	ID                 *uint64 `json:"id"`
+	Name               string  `json:"name"`
+	Price              float64 `json:"price"`
+	DiscountPercentage *uint16 `json:"discountPercentage"`
+	ImageURL           string  `json:"imageUrl"`
+	Description        string  `json:"description"`
+	UserID             uint64  `json:"userId"`
 }
 
 func (p *ProductInput) ToProduct() Product {
@@ -41,9 +47,12 @@ func (p *ProductInput) ToProduct() Product {
 	}
 
 	return Product{
-		ID:       id,
-		Name:     p.Name,
-		ImageURL: p.ImageURL,
-		UserID:   p.UserID,
+		ID:                 id,
+		Name:               p.Name,
+		ImageURL:           p.ImageURL,
+		Price:              p.Price,
+		DiscountPercentage: p.DiscountPercentage,
+		Description:        p.Description,
+		UserID:             p.UserID,
 	}
 }

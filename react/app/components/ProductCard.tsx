@@ -2,6 +2,8 @@ type ProductCardProps = {
   id: number;
   name: string;
   description: string;
+  price: number;
+  discountPercentage: number | null;
   imageUrl: string;
   href: string;
 };
@@ -11,8 +13,11 @@ export function ProductCard({
   name,
   description,
   imageUrl,
+  price,
+  discountPercentage,
   href,
 }: ProductCardProps) {
+  const productId = id;
   return (
     <div className="max-w-sm h-full flex flex-col bg-white border border-gray-200 rounded-lg shadow-sm dark:bg-gray-800 dark:border-gray-700">
       <a href={href}>
@@ -24,17 +29,15 @@ export function ProductCard({
       </a>
       <div className="flex flex-col flex-grow p-5">
         <a href={href}>
-          <h5 className="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">
+          <p className="mb-2 font-bold tracking-tight text-gray-900 dark:text-white">
             {name}
-          </h5>
+          </p>
         </a>
-        <p className="mb-3 font-normal text-gray-700 dark:text-gray-400">
-          {description}
-        </p>
-        <div className="mt-auto flex justify-end">
+        <p className="mb-3 text-xl font-bold text-rose-400">{price}</p>
+        <div className="mt-auto flex justify-center">
           <a
             href={href}
-            className="inline-flex items-center px-3 py-2 text-sm font-medium text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-orange-600 dark:hover:bg-orange-700 dark:focus:ring-blue-800 transition-all duration-300 ease-in-out"
+            className="w-full flex items-center justify-center px-3 py-2 text-sm font-medium text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-rose-600 dark:hover:bg-rose-700 dark:focus:ring-blue-800 transition-all duration-300 ease-in-out"
           >
             <p>Adicionar ao carrinho</p>
             <svg

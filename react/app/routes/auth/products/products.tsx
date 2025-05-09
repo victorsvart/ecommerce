@@ -14,6 +14,9 @@ export interface Products {
   id: number;
   name: string;
   imageUrl: string;
+  price: number;
+  discountPercentage: number | null;
+  description: string;
   userId: number;
 }
 
@@ -37,23 +40,26 @@ export default function Products({ loaderData }: Route.ComponentProps) {
   return (
     <div className="min-h-screen bg-gray-900 text-white p-10">
       <div className="mx-auto">
-        <div className="flex flex-col md:flex-row bg-gray-800 p-6 rounded-lg shadow-lg gap-8">
+        <div className="bg-gray-800 p-6 rounded-lg shadow-lg">
+          {/* todo: should add a skeleton here */}
           <Suspense fallback={<div>Loading...</div>}>
             <Await resolve={loaderData.productsPromise}>
-              {(res) =>
-                res.data.map((product) => (
-                  <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-1 gap-6 items-stretch">
+              {(res) => (
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 items-stretch">
+                  {res.data.map((product) => (
                     <ProductCard
                       key={product.id}
                       id={product.id}
                       name={product.name}
-                      description="placeholder description"
+                      price={product.price}
+                      discountPercentage={product.discountPercentage}
+                      description={product.description}
                       imageUrl={product.imageUrl}
                       href="#"
                     />
-                  </div>
-                ))
-              }
+                  ))}
+                </div>
+              )}
             </Await>
           </Suspense>
         </div>

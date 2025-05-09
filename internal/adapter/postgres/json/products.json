@@ -1,12 +1,44 @@
 [
   {
-    "Name": "Quadro Ghost In The Shell",
-    "ImageURL": "https://ih1.redbubble.net/image.1157963860.4835/mp,504x516,gloss,f8f8f8,t-pad,600x600,f8f8f8.jpg",
-    "UserID": 2
+    "id": 1,
+    "name": "Quadro Ghost In The Shell",
+    "price": 159,
+    "imageUrl": "https://ih1.redbubble.net/image.1157963860.4835/mp,504x516,gloss,f8f8f8,t-pad,600x600,f8f8f8.jpg",
+    "description": "Imagem artística inspirada no clássico anime *Ghost in the Shell*, perfeita para decorar ambientes com um toque futurista e cyberpunk. Impressa em alta qualidade, esta peça é ideal para fãs de ficção científica e cultura japonesa.",
+    "userId": 2
   },
   {
-    "Name": "Vagabond (VIZBIG Edition) Coleção Completa",
-    "ImageURL": "https://m.media-amazon.com/images/I/91PfsmoZ-UL._AC_UF1000,1000_QL80_.jpg",
-    "UserID": 2
+    "id": 2,
+    "name": "Vagabond (VIZBIG Edition) Coleção Completa",
+    "price": 389,
+    "discountPercentage": 10,
+    "imageUrl": "https://m.media-amazon.com/images/I/91PfsmoZ-UL._AC_UF1000,1000_QL80_.jpg",
+    "description": "A lendária obra de Takehiko Inoue reunida em uma coleção definitiva. *Vagabond*, baseada na vida do samurai Miyamoto Musashi, é aclamada por sua arte detalhada e narrativa profunda. Esta edição VIZBIG traz volumes em formato especial para colecionadores e fãs do mangá.",
+    "userId": 2
+  },
+  {
+    "id": 3,
+    "name": "Persona 5 Royal - 3 x Vynil (Album)",
+    "price": 249,
+    "imageUrl": "https://i.discogs.com/eLwrfHffnl11n-F7T3P4z9eCEIEHvzNrFEyEaV98ZlU/rs:fit/g:sm/q:90/h:544/w:600/czM6Ly9kaXNjb2dz/LWRhdGFiYXNlLWlt/YWdlcy9SLTE5Nzkz/NDE2LTE2MzE3NTA5/MjgtMjE4My5qcGVn.jpeg",
+    "description": "A trilha sonora de *Persona 5 Royal*, distribuída em três discos de vinil, traz as icônicas músicas do jogo em um formato premium. Perfeita para colecionadores, fãs de JRPGs e amantes da música com estilo moderno e melódico.",
+    "userId": 2
+  },
+  {
+    "id": 4,
+    "name": "Console Playstation 5 PS5 Slim Digital",
+    "price": 399.99,
+    "discountPercentage": 5,
+    "imageUrl": "https://mirandacomputacao.jetassets.com.br/produto/48879-principal.png",
+    "description": "A nova geração do console da Sony em sua versão Slim Digital, com design mais compacto e elegante. Experimente jogos com gráficos incríveis, carregamentos ultrarrápidos e uma biblioteca vasta com títulos exclusivos da PlayStation.",
+    "userId": 2
+  },
+  {
+    "id": 5,
+    "name": "Console Xbox Series X 1TB Preto",
+    "price": 389.9,
+    "imageUrl": "https://cdn.awsli.com.br/2500x2500/1919/1919257/produto/130225667/01df7cc858.jpg",
+    "description": "O console mais poderoso da Microsoft com 1TB de armazenamento SSD. Aproveite gráficos em até 4K, taxa de quadros de até 120FPS e compatibilidade com várias gerações do Xbox. Ideal para jogadores que buscam desempenho e qualidade de imagem.",
+    "userId": 2
   }
 ]

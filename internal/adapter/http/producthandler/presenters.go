@@ -1,20 +1,40 @@
 package producthandler
 
-import "github.com/victorsvart/egommerce/internal/core/domain"
+import (
+	"github.com/victorsvart/egommerce/internal/core/domain"
+	"golang.org/x/text/language"
+	"golang.org/x/text/message"
+)
 
 type ProductPresenter struct {
-	ID       uint64 `json:"id"`
-	Name     string `json:"name"`
-	ImageURL string `json:"imageUrl"`
-	UserID   uint64 `json:"userId"`
+	ID                 uint64  `json:"id"`
+	Name               string  `json:"name"`
+	ImageURL           string  `json:"imageUrl"`
+	Price              string  `json:"price"`
+	DiscountPercentage *uint16 `json:"discountPercentage"`
+	Description        string  `json:"description"`
+	UserID             uint64  `json:"userId"`
+}
+
+func formatBRL(value float64) string {
+	p := message.NewPrinter(language.BrazilianPortuguese)
+	sf := p.Sprintf("R$ %.2f", value)
+	return sf
 }
 
 func ToProductPresenter(p *domain.Product) ProductPresenter {
+	if p.DiscountPercentage != nil {
+		p.Price = p.Price * (float64(*p.DiscountPercentage) / 100)
+	}
+
 	return ProductPresenter{
-		ID:       p.ID,
-		Name:     p.Name,
-		ImageURL: p.ImageURL,
-		UserID:   p.UserID,
+		ID:                 p.ID,
+		Name:               p.Name,
+		ImageURL:           p.ImageURL,
+		Price:              formatBRL(p.Price),
+		DiscountPercentage: p.DiscountPercentage,
+		Description:        p.Description,
+		UserID:             p.UserID,
 	}
 }
 
