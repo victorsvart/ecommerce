@@ -1,8 +1,8 @@
-import makeApi, { ApiError } from "~/api/axios";
+import makeApi from "~/api/axios";
 import type { Route } from "./+types/products";
-import { Suspense, useEffect, useState } from "react";
+import { Suspense, useState } from "react";
 import { ProductCard } from "~/components/ProductCard";
-import { Await, Form, useSubmit } from "react-router";
+import { Await, Form, useSearchParams } from "react-router";
 
 export interface LoaderData {
   data: Products[];
@@ -45,31 +45,29 @@ export async function loader({ request }: Route.LoaderArgs) {
 }
 
 export default function Products({ loaderData }: Route.ComponentProps) {
-  const submit = useSubmit();
-  const [search, setSearch] = useState("");
-
-  useEffect(() => {
-    const debounce = setTimeout(() => {
-      submit({ search }, { method: "get" });
-    }, 300);
-
-    return () => clearTimeout(debounce);
-  }, [search, submit]);
+  const [searchParams] = useSearchParams();
+  const initialSearch = searchParams.get("search") ?? "";
+  const [search, setSearch] = useState(initialSearch);
 
   return (
     <div className="flex">
       <div className="w-96 min-h-screen rounded-lg bg-gray-800 text-white m-10">
         <div className="p-2">
           <Form method="get">
-            <input
-              id="search"
-              name="search"
-              type="text"
-              placeholder="Pesquisar..."
-              value={search}
-              onChange={(e) => setSearch(e.target.value)}
-              className="w-full p-2 bg-gray-700 border border-gray-600 rounded-md text-white"
-            />
+            <div className="relative w-full">
+              <input
+                id="search"
+                name="search"
+                type="text"
+                placeholder="Pesquisar..."
+                value={search}
+                onChange={(e) => setSearch(e.target.value)}
+                className="w-full p-2 pr-10 bg-gray-700 border border-gray-600 rounded-md text-white"
+              />
+              <span className="absolute inset-y-0 right-2 flex items-center text-gray-400 pointer-events-none">
+                ⏎
+              </span>
+            </div>
           </Form>
         </div>
       </div>
