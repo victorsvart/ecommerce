@@ -23,15 +23,16 @@ func formatBRL(value float64) string {
 }
 
 func ToProductPresenter(p *domain.Product) ProductPresenter {
+	price := p.Price
 	if p.DiscountPercentage != nil {
-		p.Price = p.Price * (float64(*p.DiscountPercentage) / 100)
+		price = price * (1 - float64(*p.DiscountPercentage)/100)
 	}
 
 	return ProductPresenter{
 		ID:                 p.ID,
 		Name:               p.Name,
 		ImageURL:           p.ImageURL,
-		Price:              formatBRL(p.Price),
+		Price:              formatBRL(price),
 		DiscountPercentage: p.DiscountPercentage,
 		Description:        p.Description,
 		UserID:             p.UserID,
