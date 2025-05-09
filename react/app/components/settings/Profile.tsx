@@ -98,9 +98,7 @@ function ProfileForm({ user }: { user: UserSettings }) {
           <a
             href="/profile/public"
             className="text-sm text-blue-400 hover:underline"
-          >
-            <p>Exibir perfil público</p>
-          </a>
+          ></a>
           <button
             disabled={!formChanged}
             type="submit"

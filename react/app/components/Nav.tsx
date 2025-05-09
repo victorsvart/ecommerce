@@ -8,24 +8,33 @@ export const Navbar = () => {
             width="20"
             height="20"
             fill="currentColor"
-            className="text-gray-500"
+            className="text-rose-500"
             viewBox="0 0 16 16"
           >
             <path d="m.334 0 4.358 4.359h7.15v7.15l4.358 4.358V0zM.2 9.72l4.487-4.488v6.281h6.28L6.48 16H.2z" />
           </svg>
-          <span className="ml-2 text-lg font-semibold text-gray-400 invisible sm:visible">
-            ECommerce
+          <span className="ml-2 text-lg font-semibold text-rose-600 invisible sm:visible">
+            EGommerce
           </span>
         </div>
 
         <div className="absolute left-1/2 transform -translate-x-1/2 flex space-x-6">
-          <a href="#" className="text-gray-600 hover:text-gray-900">
+          <a
+            href="#"
+            className="text-gray-300 hover:text-gray-600 transition-all duration-300 ease-in-out"
+          >
             <p>Início</p>
           </a>
-          <a href="#" className="text-gray-600 hover:text-gray-900">
+          <a
+            href="#"
+            className="text-gray-300 hover:text-gray-600 transition-all duration-300 ease-in-out"
+          >
             <p>Pesquise</p>
           </a>
-          <a href="#" className="text-gray-600 hover:text-gray-900">
+          <a
+            href="#"
+            className="text-gray-300 hover:text-gray-600 transition-all duration-300 ease-in-out"
+          >
             <p>Contato</p>
           </a>
         </div>

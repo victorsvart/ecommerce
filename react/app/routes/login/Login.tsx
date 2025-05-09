@@ -16,7 +16,7 @@ export async function loader({ request }: Route.LoaderArgs) {
       headers: { cookie: request.headers.get("cookie") },
     })
     .then(() => {
-      return redirect("/userSettings");
+      return redirect("/products");
     })
     .catch((error: AxiosError) => {
       const url = new URL(request.url);
@@ -37,7 +37,7 @@ export async function action({ request }: Route.ActionArgs) {
     const formData = await request.formData();
     const result = await authService.login(formData);
 
-    return redirect("/userSettings", {
+    return redirect("/products", {
       headers: {
         "Set-Cookie": result.cookies,
       },

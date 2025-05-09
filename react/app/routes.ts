@@ -10,5 +10,6 @@ export default [
   route("login", "./routes/login/Login.tsx"),
   layout("./routes/auth/auth.tsx", [
     route("userSettings", "./routes/auth/usersettings/usersettings.tsx"),
+    route("products", "./routes/auth/products/products.tsx"),
   ]),
 ] satisfies RouteConfig;
