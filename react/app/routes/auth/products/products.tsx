@@ -14,7 +14,7 @@ export interface Products {
   id: number;
   name: string;
   imageUrl: string;
-  price: number;
+  price: string;
   discountPercentage: number | null;
   description: string;
   userId: number;
@@ -38,7 +38,7 @@ export async function loader({ request }: Route.LoaderArgs) {
 
 export default function Products({ loaderData }: Route.ComponentProps) {
   return (
-    <div className="min-h-screen bg-gray-900 text-white p-10">
+    <div className="min-h-screen text-white p-10">
       <div className="mx-auto">
         <div className="bg-gray-800 p-6 rounded-lg shadow-lg">
           {/* todo: should add a skeleton here */}
