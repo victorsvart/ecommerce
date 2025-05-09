@@ -16,12 +16,6 @@ type ProductPresenter struct {
 	UserID             uint64  `json:"userId"`
 }
 
-func formatBRL(value float64) string {
-	p := message.NewPrinter(language.BrazilianPortuguese)
-	sf := p.Sprintf("R$ %.2f", value)
-	return sf
-}
-
 func ToProductPresenter(p *domain.Product) ProductPresenter {
 	price := p.Price
 	if p.DiscountPercentage != nil {
@@ -46,4 +40,10 @@ func ToProductPresenterSlice(p []domain.Product) []ProductPresenter {
 	}
 
 	return s
+}
+
+func formatBRL(value float64) string {
+	p := message.NewPrinter(language.BrazilianPortuguese)
+	sf := p.Sprintf("R$ %.2f", value)
+	return sf
 }
